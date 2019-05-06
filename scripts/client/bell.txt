@@ -1,8 +1,12 @@
 <?php
 const URL = "https://example.com/example";
-const DATABASE = "database.json";
+const DATABASE_FILE = __DIR__ . DIRECTORY_SEPARATOR . "database.json";
+const MEDIA_DIRECTORY = __DIR__ . DIRECTORY_SEPARATOR . "media";
 const SOFTWARE_ADDRESS = URL . "/scripts/client/bell.txt";
 const MEDIA_ADDRESS = URL . "/files/media";
+
+$database = load();
+
 if (sizeof($argv) > 1) {
     $command = $argv[1];
     switch ($command) {
@@ -12,7 +16,7 @@ if (sizeof($argv) > 1) {
         case "update":
             $software = file_get_contents(SOFTWARE_ADDRESS);
             if (!empty($software)) {
-                if (is_php($software)) {
+                if (starts($software, "<?php")) {
                     if (sha1($software) !== sha1_file(__FILE__)) {
                         file_put_contents(__FILE__, $software);
                     }
@@ -20,17 +24,89 @@ if (sizeof($argv) > 1) {
             }
             break;
         case "play":
+            if ($database !== null) {
+                if (isset($database->mute)) {
+                    if (is_bool($database->mute)) {
+                        if (!$database->mute) {
+                            if (isset($database->length)) {
+                                if (is_numeric($database->length)) {
+                                    if ($database->length > 0) {
+                                        $length = $database->length;
+                                        if (isset($database->queue)) {
+                                            if (is_string($database->queue)) {
+                                                $queueName = $database->queue;
+                                                if (isset($database->queues)) {
+                                                    if (is_object($database->queues)) {
+                                                        if (isset($database->queues->$queueName)) {
+                                                            if (is_object($database->queues->$queueName)) {
+                                                                $queue = $database->queues->$queueName;
+                                                                $time = intval(date("H")) * 60 + intval(date("m"));
+                                                                if (isset($queue->$time)) {
+                                                                    if (is_object($queue->$time)) {
+                                                                        $media = $queue->$time;
+                                                                        if (isset($media->media)) {
+                                                                            if (is_string($media->media)) {
+                                                                                $id = $media->id;
+                                                                                if (isset($media->time)) {
+                                                                                    if (is_numeric($media->time)) {
+                                                                                        $second = $media->time;
+                                                                                        if (isset($database->library)) {
+                                                                                            if (is_object($database->library)) {
+                                                                                                $library = $database->library;
+                                                                                                if (isset($library->$id)) {
+                                                                                                    if (is_object($library->$id)) {
+                                                                                                        $artifact = $library->$id;
+                                                                                                        if (isset($artifact->hash)) {
+                                                                                                            if (is_string($artifact->hash)) {
+                                                                                                                // SHA1
+                                                                                                                $file = MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $time . ".mp3";
+                                                                                                                if (file_exists($file)) {
+                                                                                                                    if (sha1_file($file) === $artifact->hash) {
+                                                                                                                        shell_exec("ffplay -i " . $file . " -ss " . $second . " -t " . $length . " -v error -nodisp -autoexit");
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
+                    }
+                }
+            }
             break;
     }
 }
 
-function is_php($software)
-{
-    return starts_with($software, "<?php");
-}
-
-function starts_with($haystack, $needle)
+function starts($haystack, $needle)
 {
     return (substr($haystack, 0, strlen($needle)) === $needle);
+}
+
+function load()
+{
+    $database = null;
+    if (file_exists(DATABASE_FILE)) {
+        $content = file_get_contents(DATABASE_FILE);
+        if (!empty($content))
+            $database = json_decode(file_get_contents(DATABASE_FILE));
+    }
+    return $database;
 }
