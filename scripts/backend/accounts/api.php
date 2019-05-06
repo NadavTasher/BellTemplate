@@ -9,7 +9,7 @@ const REGISTER_ENABLED = false;
 const VERIFY_ENABLED = true;
 const LOGIN_ENABLED = true;
 
-$database = json_decode(file_get_contents(DATABASE_FILE));
+$database = json_decode(file_get_contents(DATABASE));
 $result = new stdClass();
 
 function accounts()
@@ -204,7 +204,7 @@ function salt()
 function save()
 {
     global $database;
-    file_put_contents(DATABASE_FILE, json_encode($database));
+    file_put_contents(DATABASE, json_encode($database));
 }
 
 function user($id)

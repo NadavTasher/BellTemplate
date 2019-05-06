@@ -22,6 +22,7 @@ $content = file_get_contents(".crontab");
 $content .= "\n*/5 * * * * php $file refresh";
 $content .= "\n*/10 * * * * php $file update";
 $content .= "\n* * * * * php $file play";
+$content .= "\n\n";
 file_put_contents(".crontab", $content);
 shell_exec("crontab .crontab");
 echo "[X]\n";

@@ -3,7 +3,7 @@
 const DATABASE = __DIR__ . "/../../../files/bell/database.json";
 const MEDIA_DIRECTORY = __DIR__ . "../../../files/media";
 
-$database = json_decode(file_get_contents(DATABASE_FILE));
+$database = json_decode(file_get_contents(DATABASE));
 $result = new stdClass();
 
 function uploadFile(){
@@ -131,5 +131,5 @@ function result($type, $key, $value)
 function save()
 {
     global $database;
-    file_put_contents(DATABASE_FILE, json_encode($database));
+    file_put_contents(DATABASE, json_encode($database));
 }
