@@ -27,7 +27,8 @@
       "pattern": ".+",
       "needle": "https://example.com/example",
       "haystacks": [
-        "scripts/client/bell.txt"
+        "scripts/client/bell.txt",
+        "scripts/client/setup.txt"
       ]
     },
     {
