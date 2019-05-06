@@ -17,7 +17,7 @@ chmod($file, 0777);
 echo "[X]\n";
 
 echo "Adding to cron - ";
-$content = shell_exec("crontab -l");
+$content = shell_exec("crontab -l > /dev/null 2>&1");
 $content .= "*/5 * * * * php $file refresh";
 $content .= PHP_EOL;
 $content .= "*/10 * * * * php $file update";
@@ -25,5 +25,5 @@ $content .= PHP_EOL;
 $content .= "* * * * * php $file play";
 $content .= PHP_EOL;
 file_put_contents($bell . DIRECTORY_SEPARATOR . "crontab.txt", $content);
-shell_exec("crontab " . $bell . DIRECTORY_SEPARATOR . "crontab.txt" . " 2> /dev/null");
+shell_exec("crontab " . $bell . DIRECTORY_SEPARATOR . "crontab.txt" . " > /dev/null 2>&1");
 echo "[X]\n";
