@@ -7,8 +7,8 @@ $bell = $_SERVER["HOME"] . DIRECTORY_SEPARATOR . ".bell";
 $file = $bell . DIRECTORY_SEPARATOR . "bell.php";
 
 echo "Creating directories - ";
-mkdir($bell);
-mkdir($bell . DIRECTORY_SEPARATOR . "media");
+if (!file_exists($bell)) mkdir($bell);
+if (!file_exists($bell . DIRECTORY_SEPARATOR . "media")) mkdir($bell . DIRECTORY_SEPARATOR . "media");
 echo "[X]\n";
 
 echo "Downloading software - ";

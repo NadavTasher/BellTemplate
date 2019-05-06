@@ -7,19 +7,20 @@ const SOFTWARE_ADDRESS = URL . "/scripts/client/bell.txt";
 const MEDIA_ADDRESS = URL . "/files/media";
 
 $database = load();
-
-if (sizeof($argv) > 1) {
-    $command = $argv[1];
-    switch ($command) {
-        case "refresh":
-            refresh();
-            break;
-        case "update":
-            update();
-            break;
-        case "play":
-            play();
-            break;
+if (isset($argv)) {
+    if (sizeof($argv) > 1) {
+        $command = $argv[1];
+        switch ($command) {
+            case "refresh":
+                refresh();
+                break;
+            case "update":
+                update();
+                break;
+            case "play":
+                play();
+                break;
+        }
     }
 }
 
