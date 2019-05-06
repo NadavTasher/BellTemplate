@@ -1,0 +1,19 @@
+{
+  "queue": "main",
+  "times": [],
+  "library": {
+    "mediaID": {
+      "media": "mysong.mp3",
+      "hash": "HASH",
+      "name": "My Song"
+    }
+  },
+  "queues": {
+    "main": {
+      "830": {
+        "media": "mediaID",
+        "time": 10.2
+      }
+    }
+  }
+}
