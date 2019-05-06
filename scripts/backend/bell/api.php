@@ -6,6 +6,10 @@ const MEDIA_DIRECTORY = __DIR__ . "../../../files/media";
 $database = json_decode(file_get_contents(DATABASE));
 $result = new stdClass();
 
+function uploadFile(){
+
+}
+
 function addTime($time)
 {
     global $database;

@@ -1,0 +1,36 @@
+<?php
+const URL = "https://example.com/example";
+const DATABASE = "database.json";
+const SOFTWARE_ADDRESS = URL . "/scripts/client/bell.txt";
+const MEDIA_ADDRESS = URL . "/files/media";
+if (sizeof($argv) > 1) {
+    $command = $argv[1];
+    switch ($command) {
+        case "refresh":
+
+            break;
+        case "update":
+            $software = file_get_contents(SOFTWARE_ADDRESS);
+            if (!empty($software)) {
+                if (is_php($software)) {
+                    if (sha1($software) !== sha1_file(__FILE__)) {
+                        file_put_contents(__FILE__, $software);
+                    }
+                }
+            }
+            break;
+        case "play":
+
+            break;
+    }
+}
+
+function is_php($software)
+{
+    return starts_with($software, "<?php");
+}
+
+function starts_with($haystack, $needle)
+{
+    return (substr($haystack, 0, strlen($needle)) === $needle);
+}

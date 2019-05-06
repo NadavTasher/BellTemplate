@@ -22,6 +22,15 @@
       ]
     },
     {
+      "name": "address",
+      "description": "Web Address",
+      "pattern": ".+",
+      "needle": "https://example.com/example",
+      "haystacks": [
+        "scripts/client/bell.txt"
+      ]
+    },
+    {
       "name": "administrator-name",
       "description": "Administrator Name",
       "pattern": ".+",
