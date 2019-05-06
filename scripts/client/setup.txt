@@ -1,0 +1,27 @@
+<?php
+
+const URL = "https://example.com/example";
+const SOFTWARE_ADDRESS = URL . "/scripts/client/bell.txt";
+
+$bell = $_SERVER["HOME"] . DIRECTORY_SEPARATOR . ".bell";
+$file = $bell . DIRECTORY_SEPARATOR . "bell.php";
+
+echo "Creating directories - ";
+mkdir($bell);
+mkdir($bell . DIRECTORY_SEPARATOR . "media");
+echo "[X]\n";
+
+echo "Downloading software - ";
+file_put_contents($file, file_get_contents(SOFTWARE_ADDRESS));
+chmod($file, 0777);
+echo "[X]\n";
+
+echo "Adding to cron - ";
+shell_exec("crontab -l > .crontab");
+$content = file_get_contents(".crontab");
+$content .= "\n*/5 * * * * php $file refresh";
+$content .= "\n*/10 * * * * php $file update";
+$content .= "\n* * * * * php $file play";
+file_put_contents(".crontab", $content);
+shell_exec("crontab .crontab");
+echo "[X]\n";
