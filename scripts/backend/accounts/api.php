@@ -5,7 +5,7 @@ const LOCKOUT_ATTEMPTS = 5;
 const LOCKOUT_TIME = 5 * 60;
 const MINIMUM_PASSWORD_LENGTH = 8;
 
-const REGISTER_ENABLED = false;
+const REGISTER_ENABLED = true;
 const VERIFY_ENABLED = true;
 const LOGIN_ENABLED = true;
 
@@ -193,8 +193,9 @@ function register($name, $password)
 function result($type, $key, $value)
 {
     global $result;
-    if (!isset($result->$type)) $result->$type = new stdClass();
-    $result->$type->$key = $value;
+    if (!isset($result->accounts)) $result->accounts = new stdClass();
+    if (!isset($result->accounts->$type)) $result->accounts->$type = new stdClass();
+    $result->accounts->$type->$key = $value;
 }
 
 function salt()
