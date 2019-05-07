@@ -5,7 +5,7 @@ const LOCKOUT_ATTEMPTS = 5;
 const LOCKOUT_TIME = 5 * 60;
 const MINIMUM_PASSWORD_LENGTH = 8;
 
-const REGISTER_ENABLED = true;
+const REGISTER_ENABLED = false;
 const VERIFY_ENABLED = true;
 const LOGIN_ENABLED = true;
 
