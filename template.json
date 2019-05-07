@@ -50,24 +50,6 @@
       ]
     },
     {
-      "name": "queue",
-      "description": "Default Queue Name",
-      "pattern": ".+",
-      "needle": "BellTemplateDefault",
-      "haystacks": [
-        "scripts/host/setup.php"
-      ]
-    },
-    {
-      "name": "times",
-      "description": "Ringing Times (e.g. 1200,1245,1330)",
-      "pattern": ".+",
-      "needle": "0,0",
-      "haystacks": [
-        "scripts/host/setup.php"
-      ]
-    },
-    {
       "name": "theme",
       "description": "App Color",
       "pattern": "(#([0-9]|[A-F]|[a-f]){6})",

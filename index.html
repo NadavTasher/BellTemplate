@@ -20,12 +20,13 @@ https://github.com/NadavTasher/WebAppBase/
     <link rel="stylesheet" href="stylesheets/theme.css"/>
     <link rel="stylesheet" href="stylesheets/template.css"/>
     <script type="text/javascript" src="scripts/frontend/accounts/accounts.js"></script>
+    <script type="text/javascript" src="scripts/frontend/bell/bell.js"></script>
     <script type="text/javascript" src="scripts/frontend/app.js"></script>
     <script type="text/javascript" src="scripts/frontend/utils.js"></script>
     <title>AppName</title>
     <noscript></noscript>
 </head>
-<body onload="worker();accounts(load);">
+<body onload="worker();accounts(bell);load();">
 <div>
     <div id="accounts">
         <div id="login">
@@ -62,7 +63,45 @@ https://github.com/NadavTasher/WebAppBase/
         </div>
     </div>
     <div id="app">
-        <!--Your App Body-->
+        <div id="home">
+            <p id="title">AppName Bell Management</p>
+            <button>Preset management</button>
+            <button>Library management</button>
+            <button>General management</button>
+        </div>
+        <div id="general">
+
+        </div>
+        <div id="library">
+
+        </div>
+        <div id="preset">
+            <div id="preset-top">
+                <select id="preset-selector">
+
+                </select>
+                <img src="resources/svg/accept.svg" alt="Use as preset"/>
+                <img src="resources/svg/decline.svg" alt="Delete preset"/>
+                <img src="resources/svg/new.svg" alt="Create new preset"/>
+            </div>
+
+            <div id="preset-queue">
+
+            </div>
+            <div>
+                <div>
+                    <button>Save</button>
+                </div>
+                <div>
+                    <button>Delete Preset</button>
+                    <button>Create Preset</button>
+                </div>
+                <div>
+                    <button>Add Ringing Time</button>
+                    <button>Remove Ringing Time</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>

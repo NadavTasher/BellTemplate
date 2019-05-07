@@ -1,0 +1,43 @@
+#title {
+    font-size: 250%;
+}
+
+#description, #custom > p {
+    font-size: 150%;
+}
+
+#error {
+    color: red;
+}
+
+#queue {
+    justify-content: stretch;
+    overflow-y: -moz-scrollbars-none;
+    overflow-y: auto;
+    min-height: 60vh;
+    height: 60vh;
+}
+
+#queue > div {
+    background-color: #ddddee;
+    border-radius: 1vh;
+    border-color: transparent;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 9vh;
+    margin: 0.5vh;
+}
+
+#queue > div > * {
+    width: 100%;
+}
+
+#queue > div > p {
+    font-size: 150%;
+    line-height: 7vh;
+    height: 7vh;
+}
+
+#queue::-webkit-scrollbar {
+    width: 0 !important
+}
