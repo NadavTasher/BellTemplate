@@ -28,22 +28,28 @@ function bell()
                         }
                         break;
                     case "addTime":
-                        if(isset($parameters->time)){
+                        if (isset($parameters->time)) {
 
                         }
                         break;
                     case "removeTime":
-                        if(isset($parameters->time)){
+                        if (isset($parameters->time)) {
 
                         }
                         break;
-                    case "addQueue":
+                    case "addPreset":
 
                         break;
-                    case "addToQueue":
+                    case "removePreset":
 
                         break;
-                    case "setQueue":
+                    case "setPreset":
+
+                        break;
+                    case "add":
+
+                        break;
+                    case "remove":
 
                         break;
                 }
@@ -54,14 +60,82 @@ function bell()
     return null;
 }
 
-function addTime($time)
+// Combined management
+
+function add($time, $preset, $media, $second)
 {
     global $database;
-    if (!hasTime($time)) {
-        array_push($database->times, $time);
+    if (hasTime($time)) {
+        if (hasPreset($preset)) {
+            if (hasMedia($media)) {
+                $artifact = new stdClass();
+                $artifact->media = $media;
+                $artifact->time = $second;
+                $database->queue->$time->$preset = $artifact;
+                save();
+            }
+        }
+    }
+}
+
+function remove($time, $preset)
+{
+    global $database;
+    if (hasTime($time)) {
+        if (hasPreset($preset)) {
+            if (isset($database->queue->$time->$preset)) {
+                unset($database->queue->$time->$preset);
+                save();
+            }
+        }
+    }
+}
+
+// Preset management
+
+function addPreset($name)
+{
+    global $database;
+    if (!hasPreset($name)) {
+        array_push($database->presets, $name);
         save();
     }
 }
+
+function removePreset($name)
+{
+    global $database;
+    if (hasPreset($name)) {
+        $presets = array();
+        foreach ($database->presets as $preset) {
+            if ($preset !== $name) {
+                array_push($presets, $preset);
+            }
+        }
+        $database->presets = $presets;
+        save();
+    }
+}
+
+function setPreset($name)
+{
+    global $database;
+    if (hasPreset($name)) {
+        $database->preset = $name;
+        save();
+    }
+}
+
+function hasPreset($name)
+{
+    global $database;
+    foreach ($database->presets as $preset) {
+        if ($name === $preset) return true;
+    }
+    return false;
+}
+
+// Media management
 
 function addMedia($name, $file)
 {
@@ -75,37 +149,6 @@ function addMedia($name, $file)
     save();
 }
 
-function addToQueue($queueName, $ringingTime, $mediaID, $mediaTime)
-{
-    global $database;
-    if (hasQueue($queueName) && hasTime($ringingTime) && hasMedia($mediaID)) {
-        $media = new stdClass();
-        $media->media = $mediaID;
-        $media->time = $mediaTime;
-        $database->queues->$queueName->$ringingTime = $media;
-        save();
-    }
-
-}
-
-function addQueue($name)
-{
-    global $database;
-    if (!hasQueue($name)) {
-        $database->queues->$name = new stdClass();
-        save();
-    }
-}
-
-function setQueue($name)
-{
-    global $database;
-    if (hasQueue($name)) {
-        $database->queue = $name;
-        save();
-    }
-}
-
 function hasMedia($id)
 {
     global $database;
@@ -115,23 +158,35 @@ function hasMedia($id)
     return false;
 }
 
+// Time management
+
+function addTime($time)
+{
+    global $database;
+    if (!hasTime($time)) {
+        $database->queue->$time = new stdClass();
+        save();
+    }
+}
+
+function removeTime($time)
+{
+    global $database;
+    if (hasTime($time)) {
+        unset($database->queue->$time);
+        save();
+    }
+}
+
 function hasTime($time)
 {
     global $database;
-    foreach ($database->times as $existent) {
+    foreach ($database->queue as $existent) {
         if ($existent === $time) return true;
     }
     return false;
 }
 
-function hasQueue($name)
-{
-    global $database;
-    foreach ($database->queues as $existent) {
-        if ($name === $existent) return true;
-    }
-    return false;
-}
 
 function endsWith($haystack, $needle)
 {
