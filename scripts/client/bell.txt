@@ -46,46 +46,15 @@ function refresh()
     file_put_contents(DATABASE_FILE, file_get_contents(DATABASE_ADDRESS));
     $database = load();
     if ($database !== null) {
-        if (isset($database->queue)) {
-            if (is_string($database->queue)) {
-                $queueName = $database->queue;
-                if (isset($database->queues)) {
-                    if (is_object($database->queues)) {
-                        if (isset($database->queues->$queueName)) {
-                            if (is_object($database->queues->$queueName)) {
-                                $queue = $database->queues->$queueName;
-                                if (isset($database->library)) {
-                                    if (is_object($database->library)) {
-                                        $library = $database->library;
-                                        foreach ($queue as $time => $media) {
-                                            $file = MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $time . ".mp3";
-                                            if (is_object($media)) {
-                                                if (isset($media->media)) {
-                                                    if (is_string($media->media)) {
-                                                        $id = $media->media;
-                                                        if (isset($library->$id)) {
-                                                            if (is_object($library->$id)) {
-                                                                $artifact = $library->$id;
-                                                                if (isset($artifact->hash)) {
-                                                                    if (is_string($artifact->hash)) {
-                                                                        if (sha1_file($file) !== $artifact->hash) {
-                                                                            if (isset($artifact->media)) {
-                                                                                if (is_string($artifact->media)) {
-                                                                                    file_put_contents($file, file_get_contents(MEDIA_ADDRESS . DIRECTORY_SEPARATOR . $artifact->media));
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+        if (isset($database->queue) && isset($database->library) && isset($database->preset)) {
+            $preset = $database->preset;
+            foreach ($database->queue as $time => $media) {
+                $file = MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $time . ".mp3";
+                if (isset($media->$preset) && isset($media->$preset->media)) {
+                    $id = $media->$preset->media;
+                    if (isset($database->library->$id) && isset($database->library->$id->hash) && isset($database->library->$id->media)) {
+                        if (sha1_file($file) !== $database->library->$id->hash) {
+                            file_put_contents($file, file_get_contents(MEDIA_ADDRESS . DIRECTORY_SEPARATOR . $database->library->$id->media));
                         }
                     }
                 }
@@ -110,76 +79,19 @@ function play()
 {
     global $database;
     if ($database !== null) {
-        if (isset($database->mute)) {
-            if (is_bool($database->mute)) {
-                if (!$database->mute) {
-                    if (isset($database->length)) {
-                        if (is_numeric($database->length)) {
-                            if ($database->length > 0) {
-                                $length = $database->length;
-                                if (isset($database->queue)) {
-                                    if (is_string($database->queue)) {
-                                        $queueName = $database->queue;
-                                        if (isset($database->queues)) {
-                                            if (is_object($database->queues)) {
-                                                if (isset($database->queues->$queueName)) {
-                                                    if (is_object($database->queues->$queueName)) {
-                                                        $queue = $database->queues->$queueName;
-                                                        $time = intval(date("H")) * 60 + intval(date("m"));
-                                                        if (isset($database->times)) {
-                                                            if (is_array($database->times)) {
-                                                                $found = false;
-                                                                foreach ($database->times as $existent) {
-                                                                    if ($existent === $time) {
-                                                                        $found = true;
-                                                                    }
-                                                                }
-                                                                if ($found) {
-                                                                    if (isset($queue->$time)) {
-                                                                        if (is_object($queue->$time)) {
-                                                                            $media = $queue->$time;
-                                                                            if (isset($media->media)) {
-                                                                                if (is_string($media->media)) {
-                                                                                    $id = $media->id;
-                                                                                    if (isset($media->time)) {
-                                                                                        if (is_numeric($media->time)) {
-                                                                                            $second = $media->time;
-                                                                                            if (isset($database->library)) {
-                                                                                                if (is_object($database->library)) {
-                                                                                                    $library = $database->library;
-                                                                                                    if (isset($library->$id)) {
-                                                                                                        if (is_object($library->$id)) {
-                                                                                                            $artifact = $library->$id;
-                                                                                                            if (isset($artifact->hash)) {
-                                                                                                                if (is_string($artifact->hash)) {
-                                                                                                                    // SHA1
-                                                                                                                    $file = MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $time . ".mp3";
-                                                                                                                    if (file_exists($file)) {
-                                                                                                                        if (sha1_file($file) === $artifact->hash) {
-                                                                                                                            shell_exec("ffplay -i " . $file . " -ss " . $second . " -t " . $length . " -v error -nodisp -autoexit");
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+        if (isset($database->mute) && isset($database->length) && isset($database->queue) && isset($database->library) && isset($database->preset)) {
+            if (!$database->mute && $database->length > 0) {
+                $preset = $database->preset;
+                $length = $database->length;
+                $time = intval(date("H")) * 60 + intval(date("m"));
+                if (isset($database->queue->$time) && isset($database->queue->$time->$preset) && isset($database->queue->$time->$preset->media) && isset($database->queue->$time->$preset->time)) {
+                    $id = $database->queue->$time->$preset->media;
+                    $second = $database->queue->$time->$preset->time;
+                    if (isset($database->library->$id) && isset($database->library->$id->hash)) {
+                        $file = MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $time . ".mp3";
+                        if (file_exists($file)) {
+                            if (sha1_file($file) === $database->library->$id->hash) {
+                                shell_exec("ffplay -i " . $file . " -ss " . $second . " -t " . $length . " -v error -nodisp -autoexit");
                             }
                         }
                     }

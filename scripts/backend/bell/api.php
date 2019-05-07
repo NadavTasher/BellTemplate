@@ -100,7 +100,7 @@ function set($time, $preset, $media, $second)
             if (hasMedia($media)) {
                 $artifact = new stdClass();
                 $artifact->media = $media;
-                $artifact->time = $second;
+                $artifact->time = is_numeric($second) ? $second : doubleval($second);
                 $database->queue->$time->$preset = $artifact;
                 save();
             }
