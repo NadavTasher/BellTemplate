@@ -1,18 +1,10 @@
 {
+  "mute": false,
+  "duration": 0,
+  "presets": ["Preset A","Preset B","main","Preset S"],
   "preset": "main",
-  "queue":{
-    "time":{
-      "main":{
-        "media":"mediaID",
-        "time":10.2
-      }
-    }
+  "queue": {
   },
   "library": {
-    "mediaID": {
-      "media": "mysong.mp3",
-      "hash": "HASH",
-      "name": "My Song"
-    }
   }
 }

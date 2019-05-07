@@ -64,19 +64,33 @@ https://github.com/NadavTasher/WebAppBase/
     </div>
     <div id="app">
         <div id="home">
-            <p id="title">AppName Bell Management</p>
-            <button>Preset management</button>
-            <button>Library management</button>
-            <button>General management</button>
+            <p class="title">AppName Bell Management</p>
+            <button onclick="view('preset')">Preset management</button>
+            <button onclick="view('library')">Library management</button>
+            <button onclick="view('general')">General management</button>
         </div>
         <div id="general">
-
+            <p class="title">General management</p>
+            <p>Ringing Duration</p>
+            <div id="general-duration">
+                <input id="duration" type="number"
+                       oninput="setDuration(parseFloat(get('duration').value));saveDuration();"
+                       placeholder="Ringing Duration"/>
+            </div>
+            <p>Ringing Mute</p>
+            <div>
+                <p id="mute-state">Mute State</p>
+                <div class="row">
+                    <button id="mute" onclick="setMute(true);">Mute</button>
+                    <button id="unmute" onclick="setMute(false);">Unmute</button>
+                </div>
+            </div>
         </div>
         <div id="library">
 
         </div>
         <div id="preset">
-            <div id="preset-top">
+            <div class="row">
                 <select id="preset-selector">
 
                 </select>
@@ -84,23 +98,16 @@ https://github.com/NadavTasher/WebAppBase/
                 <img src="resources/svg/decline.svg" alt="Delete preset"/>
                 <img src="resources/svg/new.svg" alt="Create new preset"/>
             </div>
-
             <div id="preset-queue">
 
             </div>
             <div>
-                <div>
-                    <button>Save</button>
-                </div>
-                <div>
-                    <button>Delete Preset</button>
-                    <button>Create Preset</button>
-                </div>
-                <div>
-                    <button>Add Ringing Time</button>
-                    <button>Remove Ringing Time</button>
-                </div>
+                <button>Save</button>
+                <button>Add / Remove Ringing Times</button>
             </div>
+        </div>
+        <div id="times">
+
         </div>
     </div>
 </div>

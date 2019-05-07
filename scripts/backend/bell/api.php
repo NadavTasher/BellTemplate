@@ -82,12 +82,44 @@ function bell()
                             error($action, "Missing information");
                         }
                         break;
+                    case "mute":
+                        if (isset($parameters->mute)) {
+                            setMute($parameters->mute);
+                            result($action, "success", true);
+                        } else {
+                            error($action, "Missing information");
+                        }
+                        break;
+                    case "duration":
+                        if (isset($parameters->duration)) {
+                            setDuration($parameters->duration);
+                            result($action, "success", true);
+                        } else {
+                            error($action, "Missing information");
+                        }
+                        break;
                 }
 
             }
         }
     }
     return null;
+}
+
+// General management
+
+function setMute($mute)
+{
+    global $database;
+    $database->mute = $mute;
+    save();
+}
+
+function setDuration($duration)
+{
+    global $database;
+    $database->duration = $duration;
+    save();
 }
 
 // Combined management

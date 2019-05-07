@@ -1,12 +1,12 @@
-#title {
+body > div {
+    width: 340px;
+}
+
+.title {
     font-size: 250%;
 }
 
-#description, #custom > p {
-    font-size: 150%;
-}
-
-#error {
+.error {
     color: red;
 }
 
@@ -40,4 +40,31 @@
 
 #queue::-webkit-scrollbar {
     width: 0 !important
+}
+
+.row {
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.row > img {
+    height: 6vh;
+    width: 6vh;
+    margin: 1vh;
+}
+
+.row > * {
+    width: inherit;
+}
+
+#mute {
+    background-color: #AA6666;
+}
+
+#unmute {
+    background-color: #66AA66;
+}
+
+#preset-queue {
+    min-height: 60vh;
 }

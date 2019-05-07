@@ -80,10 +80,10 @@ function play()
 {
     global $database;
     if ($database !== null) {
-        if (isset($database->mute) && isset($database->length) && isset($database->queue) && isset($database->library) && isset($database->preset)) {
-            if (!$database->mute && $database->length > 0) {
+        if (isset($database->mute) && isset($database->duration) && isset($database->queue) && isset($database->library) && isset($database->preset)) {
+            if (!$database->mute && $database->duration > 0) {
                 $preset = $database->preset;
-                $length = $database->length;
+                $duration = $database->duration;
                 $time = intval(date("H")) * 60 + intval(date("m"));
                 if (isset($database->queue->$time) && isset($database->queue->$time->$preset) && isset($database->queue->$time->$preset->media) && isset($database->queue->$time->$preset->time)) {
                     $id = $database->queue->$time->$preset->media;
@@ -92,7 +92,7 @@ function play()
                         $file = MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $time . ".mp3";
                         if (file_exists($file)) {
                             if (sha1_file($file) === $database->library->$id->hash) {
-                                shell_exec("ffplay -i " . $file . " -ss " . $second . " -t " . $length . " -v error -nodisp -autoexit");
+                                shell_exec("ffplay -i " . $file . " -ss " . $second . " -t " . $duration . " -v error -nodisp -autoexit");
                             }
                         }
                     }
