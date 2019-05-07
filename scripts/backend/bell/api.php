@@ -32,6 +32,11 @@ function bell()
 
                         }
                         break;
+                    case "removeTime":
+                        if(isset($parameters->time)){
+
+                        }
+                        break;
                     case "addQueue":
 
                         break;
