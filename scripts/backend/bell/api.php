@@ -6,8 +6,47 @@ const MEDIA_DIRECTORY = __DIR__ . "../../../files/media";
 $database = json_decode(file_get_contents(DATABASE));
 $result = new stdClass();
 
-function uploadFile(){
+function bell()
+{
+    $user = accounts();
+    if ($user !== null) {
+        if (isset($_POST["bell"])) {
+            $information = json_decode(filter($_POST["bell"]));
+            if (isset($information->action) && isset($information->parameters)) {
+                $action = $information->action;
+                $parameters = $information->parameters;
+                switch ($action) {
+                    case "upload":
+                        result("upload", "success", false);
+                        if (isset($parameters->name)) {
+                            $file = random(30) . ".mp3";
+                            move_uploaded_file($_FILES["audio"]["tmp_name"], MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $file);
+                            addMedia($parameters->name, $file);
+                            result("upload", "success", true);
+                        } else {
+                            error("upload", "Missing information");
+                        }
+                        break;
+                    case "addTime":
+                        if(isset($parameters->time)){
 
+                        }
+                        break;
+                    case "addQueue":
+
+                        break;
+                    case "addToQueue":
+
+                        break;
+                    case "setQueue":
+
+                        break;
+                }
+
+            }
+        }
+    }
+    return null;
 }
 
 function addTime($time)

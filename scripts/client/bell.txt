@@ -126,28 +126,40 @@ function play()
                                                     if (is_object($database->queues->$queueName)) {
                                                         $queue = $database->queues->$queueName;
                                                         $time = intval(date("H")) * 60 + intval(date("m"));
-                                                        if (isset($queue->$time)) {
-                                                            if (is_object($queue->$time)) {
-                                                                $media = $queue->$time;
-                                                                if (isset($media->media)) {
-                                                                    if (is_string($media->media)) {
-                                                                        $id = $media->id;
-                                                                        if (isset($media->time)) {
-                                                                            if (is_numeric($media->time)) {
-                                                                                $second = $media->time;
-                                                                                if (isset($database->library)) {
-                                                                                    if (is_object($database->library)) {
-                                                                                        $library = $database->library;
-                                                                                        if (isset($library->$id)) {
-                                                                                            if (is_object($library->$id)) {
-                                                                                                $artifact = $library->$id;
-                                                                                                if (isset($artifact->hash)) {
-                                                                                                    if (is_string($artifact->hash)) {
-                                                                                                        // SHA1
-                                                                                                        $file = MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $time . ".mp3";
-                                                                                                        if (file_exists($file)) {
-                                                                                                            if (sha1_file($file) === $artifact->hash) {
-                                                                                                                shell_exec("ffplay -i " . $file . " -ss " . $second . " -t " . $length . " -v error -nodisp -autoexit");
+                                                        if (isset($database->times)) {
+                                                            if (is_array($database->times)) {
+                                                                $found = false;
+                                                                foreach ($database->times as $existent) {
+                                                                    if ($existent === $time) {
+                                                                        $found = true;
+                                                                    }
+                                                                }
+                                                                if ($found) {
+                                                                    if (isset($queue->$time)) {
+                                                                        if (is_object($queue->$time)) {
+                                                                            $media = $queue->$time;
+                                                                            if (isset($media->media)) {
+                                                                                if (is_string($media->media)) {
+                                                                                    $id = $media->id;
+                                                                                    if (isset($media->time)) {
+                                                                                        if (is_numeric($media->time)) {
+                                                                                            $second = $media->time;
+                                                                                            if (isset($database->library)) {
+                                                                                                if (is_object($database->library)) {
+                                                                                                    $library = $database->library;
+                                                                                                    if (isset($library->$id)) {
+                                                                                                        if (is_object($library->$id)) {
+                                                                                                            $artifact = $library->$id;
+                                                                                                            if (isset($artifact->hash)) {
+                                                                                                                if (is_string($artifact->hash)) {
+                                                                                                                    // SHA1
+                                                                                                                    $file = MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $time . ".mp3";
+                                                                                                                    if (file_exists($file)) {
+                                                                                                                        if (sha1_file($file) === $artifact->hash) {
+                                                                                                                            shell_exec("ffplay -i " . $file . " -ss " . $second . " -t " . $length . " -v error -nodisp -autoexit");
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
                                                                                                             }
                                                                                                         }
                                                                                                     }
