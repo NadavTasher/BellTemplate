@@ -85,29 +85,34 @@ https://github.com/NadavTasher/WebAppBase/
                     <button id="unmute" onclick="setMute(false);">Unmute</button>
                 </div>
             </div>
+            <p>Ringing Time</p>
+            <div>
+                <div class="row">
+                    <button id="time-add" onclick="addTime();">Add</button>
+                    <button id="time-remove" onclick="removeTime();">Remove</button>
+                </div>
+            </div>
         </div>
         <div id="library">
+            <p class="title">Library management</p>
+            <div id="library-list">
 
+            </div>
+            <button onclick="addMedia()">Expand library</button>
         </div>
         <div id="preset">
+            <p class="title">Preset management</p>
             <div class="row">
-                <select id="preset-selector">
+                <select id="preset-selector" oninput="loadQueue()">
 
                 </select>
-                <img src="resources/svg/accept.svg" alt="Use as preset"/>
-                <img src="resources/svg/decline.svg" alt="Delete preset"/>
-                <img src="resources/svg/new.svg" alt="Create new preset"/>
+                <img src="resources/svg/accept.svg" onclick="usePreset()" alt="Use"/>
+                <img src="resources/svg/decline.svg" onclick="deletePreset()" alt="Delete"/>
+                <img src="resources/svg/new.svg" onclick="createPreset()" alt="Create new"/>
             </div>
             <div id="preset-queue">
 
             </div>
-            <div>
-                <button>Save</button>
-                <button>Add / Remove Ringing Times</button>
-            </div>
-        </div>
-        <div id="times">
-
         </div>
     </div>
 </div>

@@ -1,3 +1,5 @@
+let database = null;
+
 function bell(loggedIn) {
     if (loggedIn) {
         view("home");
@@ -10,28 +12,67 @@ function loadDatabase() {
         method: "get"
     }).then(response => {
         response.text().then((result) => {
-            let json = JSON.parse(result);
-            if (json.hasOwnProperty("mute")) {
-                get("mute-state").innerText = muteTextForState(json.mute);
-            }
-            if (json.hasOwnProperty("duration")) {
-                get("duration").value = json.duration;
-            }
-            if (json.hasOwnProperty("presets")) {
-                for (let i = 0; i < json.presets.length; i++) {
-                    let preset = document.createElement("option");
-                    preset.value = json.presets[i];
-                    preset.innerText = json.presets[i];
-                    get("preset-selector").appendChild(preset);
-
-                    let queue = document.createElement("div");
-                    queue.id = "preset-queue-" + json.presets[i];
-
-                }
-                get("preset-selector").value = json.hasOwnProperty("preset") ? json.preset : "";
-            }
+            database = JSON.parse(result);
+            updateGeneral();
+            updatePresets();
+            updateTimes();
+            updateLibrary();
         });
     });
+}
+
+function updateGeneral() {
+    updateMute();
+    updateDuration();
+}
+
+function updatePresets() {
+
+}
+
+function updateTimes() {
+
+}
+
+function updateLibrary() {
+    if (database.hasOwnProperty("library")) {
+        for (let key in database.library) {
+            if (database.library.hasOwnProperty(key)) {
+                let value = database.library[key];
+
+            }
+        }
+    }
+}
+
+function updateMute() {
+    if (database.hasOwnProperty("mute")) {
+        get("mute-state").innerText = muteTextForState(database.mute);
+    }
+}
+
+function updateDuration() {
+    if (database.hasOwnProperty("duration")) {
+        get("duration").value = database.duration;
+    }
+}
+
+function update() {
+
+
+    if (json.hasOwnProperty("presets")) {
+        for (let i = 0; i < json.presets.length; i++) {
+            let preset = document.createElement("option");
+            preset.value = json.presets[i];
+            preset.innerText = json.presets[i];
+            get("preset-selector").appendChild(preset);
+
+            let queue = document.createElement("div");
+            queue.id = "preset-queue-" + json.presets[i];
+
+        }
+        get("preset-selector").value = json.hasOwnProperty("preset") ? json.preset : "";
+    }
 }
 
 function setMute(state) {

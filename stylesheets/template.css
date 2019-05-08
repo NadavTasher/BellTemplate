@@ -6,42 +6,6 @@ body > div {
     font-size: 250%;
 }
 
-.error {
-    color: red;
-}
-
-#queue {
-    justify-content: stretch;
-    overflow-y: -moz-scrollbars-none;
-    overflow-y: auto;
-    min-height: 60vh;
-    height: 60vh;
-}
-
-#queue > div {
-    background-color: #ddddee;
-    border-radius: 1vh;
-    border-color: transparent;
-    flex-direction: row;
-    justify-content: space-around;
-    height: 9vh;
-    margin: 0.5vh;
-}
-
-#queue > div > * {
-    width: 100%;
-}
-
-#queue > div > p {
-    font-size: 150%;
-    line-height: 7vh;
-    height: 7vh;
-}
-
-#queue::-webkit-scrollbar {
-    width: 0 !important
-}
-
 .row {
     flex-direction: row;
     justify-content: space-around;
@@ -65,6 +29,37 @@ body > div {
     background-color: #66AA66;
 }
 
-#preset-queue {
-    min-height: 60vh;
+#preset-queue, #library-list {
+    min-height: 70vh;
 }
+
+
+#preset-queue {
+    justify-content: stretch;
+    overflow-y: -moz-scrollbars-none;
+    overflow-y: auto;
+}
+
+#preset-queue > div {
+    background-color: #ddddee;
+    border-radius: 1vh;
+    border-color: transparent;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 9vh;
+    margin: 0.5vh;
+}
+
+#preset-queue > div > * {
+    width: 100%;
+}
+
+#preset-queue > div > p {
+    font-size: 150%;
+    line-height: 7vh;
+    height: 7vh;
+}
+
+/*#preset-queue::-webkit-scrollbar {*/
+    /*width: 0 !important*/
+/*}*/
