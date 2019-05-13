@@ -39,7 +39,9 @@ function updateLibrary() {
         for (let key in database.library) {
             if (database.library.hasOwnProperty(key)) {
                 let value = database.library[key];
-
+                let media = document.createElement("p");
+                media.innerText = value.name;
+                get("library-list").appendChild(media);
             }
         }
     }
@@ -82,6 +84,10 @@ function setMute(state) {
 
 function muteTextForState(state) {
     return "State: " + (state ? "Muted" : "Not Muted");
+}
+
+function addMedia() {
+    view("library-add");
 }
 
 function prompt(title, description, callback) {

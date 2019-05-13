@@ -30,14 +30,11 @@ body > div {
 }
 
 #preset-queue, #library-list {
-    min-height: 70vh;
-}
-
-
-#preset-queue {
     justify-content: stretch;
     overflow-y: -moz-scrollbars-none;
     overflow-y: auto;
+    min-height: 70vh;
+    max-height: 70vh;
 }
 
 #preset-queue > div {
@@ -60,6 +57,30 @@ body > div {
     height: 7vh;
 }
 
-/*#preset-queue::-webkit-scrollbar {*/
-    /*width: 0 !important*/
-/*}*/
+#preset-queue::-webkit-scrollbar, #library-list::-webkit-scrollbar {
+    width: 0;
+}
+
+label {
+    -webkit-appearance: none;
+    align-self: stretch;
+    font-family: Arial, ArialHebrew, sans-serif;
+    font-size: x-large;
+    text-align-last: center;
+    text-align: center;
+    color: #000;
+    margin: 1vh;
+    padding: 1vh;
+}
+
+label {
+    transition-duration: 0.4s;
+    background-color: #ddddee;
+    border-radius: 1vh;
+    border-color: transparent;
+    color: #333;
+}
+
+label:hover {
+    background-color: #bbbbcc;
+}
