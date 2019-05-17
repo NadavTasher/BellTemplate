@@ -77,9 +77,15 @@ function update() {
     }
 }
 
+function setDuration(duration) {
+    if (/^[0-9]+\.[0-9]+$/.test(duration)) {
+        save("duration", {duration: parseFloat(duration)});
+    }
+}
+
 function setMute(state) {
     get("mute-state").innerText = muteTextForState(state);
-    save("setMute", {mute: state}, () => {
+    save("mute", {mute: state}, () => {
     });
 }
 
@@ -95,7 +101,7 @@ function uploadMedia() {
     }, form);
 }
 
-function save(command, parameters, callback, form = fillForm()) {
+function save(command, parameters, callback = undefined, form = fillForm()) {
     form.append("bell", JSON.stringify({
         action: command,
         parameters: parameters
@@ -108,7 +114,8 @@ function save(command, parameters, callback, form = fillForm()) {
             let json = JSON.parse(result);
             if (json.hasOwnProperty("bell")) {
                 if (json.bell.hasOwnProperty(command)) {
-                    callback(json.bell[command]);
+                    if (callback !== undefined)
+                        callback(json.bell[command]);
                 }
             }
         });
