@@ -4,7 +4,7 @@ include "../backend/accounts/api.php";
 // Template replacement constants
 const ADMINISTRATOR_ACCOUNT_NAME = "Administrator";
 const ADMINISTRATOR_ACCOUNT_PASSWORD = "BellTemplateDefaultPassword";
-const DEFAULT_QUEUE = "BellTemplateQueue";
+const DEFAULT_PRESET = "BellTemplatePreset";
 const RINGING_SCHEDULE = [0, 0];
 
 accounts_register(ADMINISTRATOR_ACCOUNT_NAME, ADMINISTRATOR_ACCOUNT_PASSWORD);
@@ -12,7 +12,9 @@ accounts_save();
 foreach (RINGING_SCHEDULE as $ring) {
     bell_add_time(HHMMtoMMMM($ring));
 }
-addQueue(DEFAULT_QUEUE);
+
+bell_add_preset(DEFAULT_PRESET);
+bell_set_preset(DEFAULT_PRESET);
 
 function HHMMtoMMMM($hhmm)
 {
