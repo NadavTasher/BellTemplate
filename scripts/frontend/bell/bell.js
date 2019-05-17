@@ -78,9 +78,8 @@ function update() {
 }
 
 function setDuration(duration) {
-    if (/^[0-9]+\.[0-9]+$/.test(duration)) {
+    if (!isNaN(duration))
         save("duration", {duration: parseFloat(duration)});
-    }
 }
 
 function setMute(state) {
