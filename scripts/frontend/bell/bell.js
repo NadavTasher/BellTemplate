@@ -79,17 +79,42 @@ function update() {
 
 function setMute(state) {
     get("mute-state").innerText = muteTextForState(state);
-    saveMute(state);
+    save("setMute", {mute: state}, () => {
+    });
 }
 
 function muteTextForState(state) {
     return "State: " + (state ? "Muted" : "Not Muted");
 }
 
-function addMedia() {
-    view("library-add");
+function uploadMedia() {
+    let form = fillForm();
+    form.append("audio", get("library-add-file").files[0]);
+    save("upload", {name: get("library-add-name").value}, (result) => {
+        if (result.hasOwnProperty("success") && result.success) reload();
+    }, form);
 }
 
-function prompt(title, description, callback) {
+function save(command, parameters, callback, form = fillForm()) {
+    form.append("bell", JSON.stringify({
+        action: command,
+        parameters: parameters
+    }));
+    fetch("scripts/backend/bell/bell.php", {
+        method: "post",
+        body: form
+    }).then(response => {
+        response.text().then((result) => {
+            let json = JSON.parse(result);
+            if (json.hasOwnProperty("bell")) {
+                if (json.bell.hasOwnProperty(command)) {
+                    callback(json.bell[command]);
+                }
+            }
+        });
+    });
+}
 
+function reload() {
+    window.location.reload(true);
 }

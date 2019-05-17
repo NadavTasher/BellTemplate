@@ -1,7 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: nadav
- * Date: 5/6/19
- * Time: 4:18 PM
- */
+include "api.php";
+bell();
+echo json_encode($result);

@@ -7,9 +7,10 @@ const ADMINISTRATOR_ACCOUNT_PASSWORD = "BellTemplateDefaultPassword";
 const DEFAULT_QUEUE = "BellTemplateQueue";
 const RINGING_SCHEDULE = [0, 0];
 
-register(ADMINISTRATOR_ACCOUNT_NAME, ADMINISTRATOR_ACCOUNT_PASSWORD);
+accounts_register(ADMINISTRATOR_ACCOUNT_NAME, ADMINISTRATOR_ACCOUNT_PASSWORD);
+accounts_save();
 foreach (RINGING_SCHEDULE as $ring) {
-    addTime(HHMMtoMMMM($ring));
+    bell_add_time(HHMMtoMMMM($ring));
 }
 addQueue(DEFAULT_QUEUE);
 

@@ -60,27 +60,3 @@ body > div {
 #preset-queue::-webkit-scrollbar, #library-list::-webkit-scrollbar {
     width: 0;
 }
-
-label {
-    -webkit-appearance: none;
-    align-self: stretch;
-    font-family: Arial, ArialHebrew, sans-serif;
-    font-size: x-large;
-    text-align-last: center;
-    text-align: center;
-    color: #000;
-    margin: 1vh;
-    padding: 1vh;
-}
-
-label {
-    transition-duration: 0.4s;
-    background-color: #ddddee;
-    border-radius: 1vh;
-    border-color: transparent;
-    color: #333;
-}
-
-label:hover {
-    background-color: #bbbbcc;
-}

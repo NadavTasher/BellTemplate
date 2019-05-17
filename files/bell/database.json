@@ -1,11 +1,1 @@
-{
-  "mute": false,
-  "duration": 0,
-  "presets": ["Preset A","Preset B","main","Preset S"],
-  "preset": "main",
-  "queue": {
-  },
-  "library": {
-    "39fnoid":{"name":"DP - Gel Lucky"}
-  }
-}
+{"mute":false,"duration":0,"presets":["Preset A","Preset B","main","Preset S"],"preset":"main","queue":{},"library":{"39fnoid":{"name":"DP - Gel Lucky"},"bqe5WJmuuE55oKK6Mar9":{"name":"Test - Alexa","media":"QcIiU7vft7IArI07L0oXcp8iyQdICH.mp3","hash":false},"QCEbJvmLeReNvacowk0B":{"name":"Test2 - Alexa","media":"LuMBl7tIbZE2u0HoqLPkgYAG2advXX.mp3","hash":"098132bfb7354a2495c59f6c6b5aeeac4d413256"},"sE0VOKRKAJB6M3AOaxUo":{"name":"Test3 - Alexa","media":"tSKlPUfM96pEOAXOmjeLnGGZZvNdwt.mp3","hash":"098132bfb7354a2495c59f6c6b5aeeac4d413256"}}}
