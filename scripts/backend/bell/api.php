@@ -101,7 +101,7 @@ function bell()
                         }
                         break;
                 }
-
+                bell_save();
             }
         }
     }
@@ -114,14 +114,12 @@ function bell_set_mute($mute)
 {
     global $database;
     $database->mute = $mute;
-    bell_save();
 }
 
 function bell_set_duration($duration)
 {
     global $database;
     $database->duration = $duration;
-    bell_save();
 }
 
 // Combined management
@@ -136,7 +134,6 @@ function bell_set($time, $preset, $media, $second)
                 $artifact->media = $media;
                 $artifact->time = is_numeric($second) ? $second : doubleval($second);
                 $database->queue->$time->$preset = $artifact;
-                bell_save();
             }
         }
     }
@@ -149,7 +146,6 @@ function bell_remove($time, $preset)
         if (bell_has_preset($preset)) {
             if (isset($database->queue->$time->$preset)) {
                 unset($database->queue->$time->$preset);
-                bell_save();
             }
         }
     }
@@ -162,7 +158,6 @@ function bell_add_preset($name)
     global $database;
     if (!bell_has_preset($name)) {
         array_push($database->presets, $name);
-        bell_save();
     }
 }
 
@@ -180,7 +175,6 @@ function bell_remove_preset($name)
             if (isset($database->queue->$time->$name)) unset($database->queue->$time->$name);
         }
         $database->presets = $presets;
-        bell_save();
     }
 }
 
@@ -189,7 +183,6 @@ function bell_set_preset($name)
     global $database;
     if (bell_has_preset($name)) {
         $database->preset = $name;
-        bell_save();
     }
 }
 
@@ -213,7 +206,6 @@ function bell_add_media($name, $file)
     $media->media = $file;
     $media->hash = sha1_file(MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $file);
     $database->library->$mediaID = $media;
-    bell_save();
 }
 
 function bell_has_media($id)
@@ -232,7 +224,6 @@ function bell_add_time($time)
     global $database;
     if (!bell_has_time($time)) {
         $database->queue->$time = new stdClass();
-        bell_save();
     }
 }
 
@@ -241,7 +232,6 @@ function bell_remove_time($time)
     global $database;
     if (bell_has_time($time)) {
         unset($database->queue->$time);
-        bell_save();
     }
 }
 

@@ -27,7 +27,17 @@ function updateGeneral() {
 }
 
 function updatePresets() {
-
+    if (database.hasOwnProperty("presets")) {
+        clear("preset-list");
+        for (let key in database.library) {
+            if (database.library.hasOwnProperty(key)) {
+                let value = database.library[key];
+                let media = document.createElement("p");
+                media.innerText = value.name;
+                get("library-list").appendChild(media);
+            }
+        }
+    }
 }
 
 function updateTimes() {
@@ -36,6 +46,7 @@ function updateTimes() {
 
 function updateLibrary() {
     if (database.hasOwnProperty("library")) {
+        clear("library-list");
         for (let key in database.library) {
             if (database.library.hasOwnProperty(key)) {
                 let value = database.library[key];
