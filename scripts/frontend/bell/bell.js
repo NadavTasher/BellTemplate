@@ -89,10 +89,6 @@ function muteTextForState(state) {
     return "State: " + (state ? "Muted" : "Not Muted");
 }
 
-function reload() {
-    window.location.reload(true);
-}
-
 function save(command, parameters, callback = undefined, form = fillForm()) {
     form.append("bell", JSON.stringify({
         action: command,
@@ -116,12 +112,12 @@ function save(command, parameters, callback = undefined, form = fillForm()) {
 
 function setDuration(duration) {
     if (!isNaN(parseFloat(duration)))
-        save("duration", {duration: parseFloat(duration)});
+        save("duration-set", {duration: parseFloat(duration)});
 }
 
 function setMute(state) {
     get("mute-state").innerText = muteTextForState(state);
-    save("mute", {mute: state});
+    save("mute-set", {mute: state});
 }
 
 function updateDuration() {
@@ -186,9 +182,7 @@ function updateSubmenus() {
                 time.innerText = ((parseInt(key) - parseInt(key) % 60) / 60) + ":" + ((parseInt(key) % 60 < 10) ? ("0" + parseInt(key) % 60) : (parseInt(key) % 60));
                 button.innerText = "Remove";
                 button.onclick = () => {
-                    save("removeTime", {time: key}, () => {
-                        loadDatabase();
-                    });
+                    removeTime(key);
                 };
                 div.appendChild(time);
                 div.appendChild(button);
@@ -196,59 +190,58 @@ function updateSubmenus() {
             }
         }
     }
+    // Preset remove submenu
+    if (database.hasOwnProperty("presets")) {
+        clear("preset-remove-list");
+        for (let i = 0; i < database.presets.length; i++) {
+            let value = database.presets[i];
+            let div = document.createElement("div");
+            let name = document.createElement("p");
+            let button = document.createElement("button");
+            div.classList.add("sideways");
+            name.innerText = value;
+            button.innerText = "Remove";
+            button.onclick = () => {
+                removePreset(value);
+            };
+            div.appendChild(name);
+            div.appendChild(button);
+            get("preset-remove-list").appendChild(div);
+        }
+    }
 }
 
 function usePreset(name, callback = undefined) {
-    save("setPreset", {preset: name}, () => {
+    save("preset-set", {preset: name}, () => {
         loadDatabase(callback);
     });
 }
 
-function addTime(callback = undefined) {
-    save("addTime", {time: (parseInt(get("time-add-hour").value) * 60 + parseInt(get("time-add-minute").value))}, () => {
+function addPreset(name, callback = undefined) {
+    save("preset-add", {preset: name}, () => {
         loadDatabase(callback);
     });
 }
 
-function removeTime() {
-    let div = document.createElement("div");
-    let title = document.createElement("p");
-    let cancel = document.createElement("button");
-    let scrolly = document.createElement("div");
-    title.classList.add("title");
-    scrolly.classList.add("scrolly");
-    title.innerText = "Remove time";
-    cancel.innerText = "Done";
-    cancel.onclick = () => {
-        view("general");
-    };
-    if (database.hasOwnProperty("queue")) {
-        for (let key in database.queue) {
-            if (database.queue.hasOwnProperty(key)) {
-                let div = document.createElement("div");
-                let time = document.createElement("p");
-                let button = document.createElement("button");
-                div.classList.add("sideways");
-                time.innerText = ((parseInt(key) - parseInt(key) % 60) / 60) + ":" + ((parseInt(key) % 60 < 10) ? ("0" + parseInt(key) % 60) : (parseInt(key) % 60));
-                button.innerText = "Remove";
-                button.onclick = () => {
-                    save("removeTime", {time: key}, () => {
-                        scrolly.removeChild(div);
-                    });
-                };
-                div.appendChild(time);
-                div.appendChild(button);
-                scrolly.appendChild(div);
-            }
-        }
-    }
-    div.appendChild(title);
-    div.appendChild(scrolly);
-    div.appendChild(cancel);
-    prompt(div);
+function removePreset(name, callback = undefined) {
+    save("preset-remove", {preset: name}, () => {
+        loadDatabase(callback);
+    });
 }
 
-function uploadMedia() {
+function addTime(hour, minute, callback = undefined) {
+    save("time-add", {time: (parseInt(hour) * 60 + parseInt(minute))}, () => {
+        loadDatabase(callback);
+    });
+}
+
+function removeTime(time, callback = undefined) {
+    save("time-remove", {time: time}, () => {
+        loadDatabase(callback);
+    });
+}
+
+function addMedia() {
     let form = fillForm();
     form.append("audio", get("library-add-file").files[0]);
     if (get("library-add-name").value.length > 0) {

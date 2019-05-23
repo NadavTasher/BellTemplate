@@ -81,15 +81,15 @@ https://github.com/NadavTasher/WebAppBase/
             <div>
                 <p id="mute-state">Mute State</p>
                 <div class="sideways">
-                    <button id="mute" onclick="setMute(true);">Mute</button>
-                    <button id="unmute" onclick="setMute(false);">Unmute</button>
+                    <button class="green" onclick="setMute(false);">Unmute</button>
+                    <button class="red" onclick="setMute(true);">Mute</button>
                 </div>
             </div>
             <p>Ringing Time</p>
             <div>
                 <div class="sideways">
-                    <button onclick="view('submenus');view('time-add');">Add</button>
-                    <button onclick="view('submenus');view('time-remove');">Remove</button>
+                    <button class="green" onclick="view('submenus');view('time-add');">Add</button>
+                    <button class="red" onclick="view('submenus');view('time-remove');">Remove</button>
                 </div>
             </div>
         </div>
@@ -103,12 +103,11 @@ https://github.com/NadavTasher/WebAppBase/
         <div id="preset">
             <p class="title">Preset management</p>
             <div class="sideways">
-                <button onclick="view('submenus');view('preset-add');">Add</button>
-                <button onclick="view('submenus');view('preset-remove');">Remove</button>
+                <button class="green" onclick="view('submenus');view('preset-add');">Add</button>
+                <button class="red" onclick="view('submenus');view('preset-remove');">Remove</button>
             </div>
             <div class="sideways">
-                <select id="preset-list" oninput="loadPreset(this.value);">
-                </select>
+                <select id="preset-list" oninput="loadPreset(this.value);"></select>
                 <button onclick="usePreset(get('preset-list').value);">Use</button>
             </div>
             <div id="preset-queue" class="scrolly">
@@ -120,11 +119,13 @@ https://github.com/NadavTasher/WebAppBase/
                 <p class="title">Add time</p>
                 <div class="sideways">
                     <input id="time-add-hour" type="number" placeholder="Hour" min="0" max="23"/>
-                    <p>:</p>
+                    <p id="colon">:</p>
                     <input id="time-add-minute" type="number" placeholder="Minute" min="0" max="59"/>
                 </div>
                 <div class="sideways">
-                    <button onclick="addTime(()=>{view('general');});">Add</button>
+                    <button onclick="addTime(get('time-add-hour').value,get('time-add-minute').value,()=>{view('general');});">
+                        Add
+                    </button>
                     <button onclick="view('general');">Cancel</button>
                 </div>
             </div>
@@ -137,9 +138,11 @@ https://github.com/NadavTasher/WebAppBase/
             </div>
             <div id="preset-add">
                 <p class="title">Add preset</p>
-                <input id="preset-add-name" type="text" placeholder="Name"/>
                 <div class="sideways">
-                    <button onclick="addPreset(()=>{view('preset');});">Add</button>
+                    <input id="preset-add-name" type="text" placeholder="Name"/>
+                </div>
+                <div class="sideways">
+                    <button onclick="addPreset(get('preset-add-name').value,()=>{view('preset');});">Add</button>
                     <button onclick="view('preset');">Cancel</button>
                 </div>
             </div>
@@ -152,7 +155,7 @@ https://github.com/NadavTasher/WebAppBase/
                 <p class="title">Add media</p>
                 <input id="library-add-name" placeholder="Media Name"/>
                 <input id="library-add-file" name="audio" type="file"/>
-                <button onclick="uploadMedia()">Add Media</button>
+                <button onclick="addMedia()">Add Media</button>
             </div>
         </div>
     </div>

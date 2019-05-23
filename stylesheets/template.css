@@ -1,54 +1,13 @@
-body > div {
-    width: 340px;
+#colon {
+    width: min-content;
 }
 
-.title {
-    font-size: 250%;
-}
-
-.sideways {
-    flex-direction: row;
-    justify-content: space-around;
-    background-color: #ddddee;
-    border-radius: 1vh;
-    border-color: transparent;
-    margin: 0.5vh;
-}
-
-.sideways > img {
-    height: 6vh;
-    width: 6vh;
-    margin: 1vh;
-}
-
-.sideways > * {
-    width: inherit;
-}
-
-#mute {
-    background-color: #AA6666;
-}
-
-#unmute {
+.green {
     background-color: #66AA66;
 }
 
-.scrolly {
-    justify-content: stretch;
-    overflow-y: -moz-scrollbars-none;
-    overflow-y: auto;
-    min-height: 70vh;
-    max-height: 70vh;
-}
-
-.scrolly > div {
-    background-color: #ddddee;
-    border-radius: 1vh;
-    border-color: transparent;
-    flex-direction: row;
-    justify-content: space-around;
-    height: 9vh;
-    margin: 0.5vh;
+.red {
+    background-color: #AA6666;
 }
 
 .scrolly > div > * {
@@ -61,6 +20,52 @@ body > div {
     height: 7vh;
 }
 
+.scrolly > div {
+    background-color: #ddddee;
+    border-radius: 1vh;
+    border-color: transparent;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 9vh;
+    margin: 0.5vh;
+}
+
+.scrolly {
+    justify-content: stretch;
+    overflow-y: -moz-scrollbars-none;
+    overflow-y: auto;
+    min-height: 70vh;
+    max-height: 70vh;
+}
+
 .scrolly::-webkit-scrollbar {
     width: 0;
 }
+
+.sideways > * {
+    width: inherit;
+}
+
+.sideways > img {
+    height: 6vh;
+    width: 6vh;
+    margin: 1vh;
+}
+
+.sideways {
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: #ddddee;
+    border-radius: 1vh;
+    border-color: transparent;
+    margin: 0.5vh;
+}
+
+.title {
+    font-size: 250%;
+}
+
+body > div {
+    width: 340px;
+}
+

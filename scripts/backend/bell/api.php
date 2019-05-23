@@ -18,7 +18,7 @@ function bell()
                 $parameters = $information->parameters;
                 bell_result($action, "success", false);
                 switch ($action) {
-                    case "upload":
+                    case "media-add":
                         if (isset($parameters->name)) {
                             $file = bell_random(30) . ".mp3";
                             move_uploaded_file($_FILES["audio"]["tmp_name"], MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $file);
@@ -28,7 +28,7 @@ function bell()
                             bell_error($action, "Missing information");
                         }
                         break;
-                    case "addTime":
+                    case "time-add":
                         if (isset($parameters->time)) {
                             bell_add_time($parameters->time);
                             bell_result($action, "success", true);
@@ -36,7 +36,7 @@ function bell()
                             bell_error($action, "Missing information");
                         }
                         break;
-                    case "removeTime":
+                    case "time-remove":
                         if (isset($parameters->time)) {
                             bell_remove_time($parameters->time);
                             bell_result($action, "success", true);
@@ -44,7 +44,7 @@ function bell()
                             bell_error($action, "Missing information");
                         }
                         break;
-                    case "addPreset":
+                    case "preset-add":
                         if (isset($parameters->preset)) {
                             bell_add_preset($parameters->preset);
                             bell_result($action, "success", true);
@@ -52,7 +52,7 @@ function bell()
                             bell_error($action, "Missing information");
                         }
                         break;
-                    case "removePreset":
+                    case "preset-remove":
                         if (isset($parameters->preset)) {
                             bell_remove_preset($parameters->preset);
                             bell_result($action, "success", true);
@@ -60,7 +60,7 @@ function bell()
                             bell_error($action, "Missing information");
                         }
                         break;
-                    case "setPreset":
+                    case "preset-set":
                         if (isset($parameters->preset)) {
                             bell_set_preset($parameters->preset);
                             bell_result($action, "success", true);
@@ -68,7 +68,7 @@ function bell()
                             bell_error($action, "Missing information");
                         }
                         break;
-                    case "set":
+                    case "queue-add":
                         if (isset($parameters->time) && isset($parameters->preset) && isset($parameters->media) && isset($parameters->second)) {
                             bell_set($parameters->time, $parameters->preset, $parameters->media, $parameters->second);
                             bell_result($action, "success", true);
@@ -76,7 +76,7 @@ function bell()
                             bell_error($action, "Missing information");
                         }
                         break;
-                    case "remove":
+                    case "queue-remove":
                         if (isset($parameters->time) && isset($parameters->preset)) {
                             bell_remove($parameters->time, $parameters->preset);
                             bell_result($action, "success", true);
@@ -84,7 +84,7 @@ function bell()
                             bell_error($action, "Missing information");
                         }
                         break;
-                    case "mute":
+                    case "mute-set":
                         if (isset($parameters->mute)) {
                             bell_set_mute($parameters->mute);
                             bell_result($action, "success", true);
@@ -92,7 +92,7 @@ function bell()
                             bell_error($action, "Missing information");
                         }
                         break;
-                    case "duration":
+                    case "duration-set":
                         if (isset($parameters->duration)) {
                             bell_set_duration($parameters->duration);
                             bell_result($action, "success", true);
@@ -172,7 +172,7 @@ function bell_remove_preset($name)
             }
         }
         foreach ($database->queue as $time) {
-            if (isset($database->queue->$time->$name)) unset($database->queue->$time->$name);
+            if (isset($time->$name)) unset($time->$name);
         }
         $database->presets = $presets;
     }
