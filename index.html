@@ -103,12 +103,11 @@ https://github.com/NadavTasher/WebAppBase/
         <div id="preset">
             <p class="title">Preset management</p>
             <div class="row">
-                <select id="preset-selector" oninput="loadQueue()">
-
+                <select id="preset-list" oninput="loadPreset(this.value)">
                 </select>
-                <img src="resources/svg/accept.svg" onclick="usePreset()" alt="Use"/>
-                <img src="resources/svg/decline.svg" onclick="deletePreset()" alt="Delete"/>
-                <img src="resources/svg/new.svg" onclick="createPreset()" alt="Create new"/>
+                <img src="resources/svg/accept.svg" onclick="usePreset(get('preset-list').value)" alt="Use"/>
+                <img src="resources/svg/decline.svg" onclick="deletePreset(get('preset-list').value)" alt="Delete"/>
+                <img src="resources/svg/new.svg" onclick="createPreset(get('preset-list').value)" alt="Create new"/>
             </div>
             <div id="preset-queue">
 
