@@ -11,7 +11,7 @@ function addMedia() {
     let form = fillForm();
     form.append("audio", get("library-add-file").files[0]);
     if (get("library-add-name").value.length > 0) {
-        save("upload", {name: get("library-add-name").value}, (result) => {
+        save("media-add", {name: get("library-add-name").value}, (result) => {
             if (result.hasOwnProperty("success") && result.success) {
                 loadDatabase(() => {
                     view("library");
