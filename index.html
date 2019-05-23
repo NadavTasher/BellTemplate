@@ -103,11 +103,13 @@ https://github.com/NadavTasher/WebAppBase/
         <div id="preset">
             <p class="title">Preset management</p>
             <div class="sideways">
-                <select id="preset-list" oninput="loadPreset(this.value)">
+                <button onclick="view('submenus');view('preset-add');">Add</button>
+                <button onclick="view('submenus');view('preset-remove');">Remove</button>
+            </div>
+            <div class="sideways">
+                <select id="preset-list" oninput="loadPreset(this.value);">
                 </select>
-                <img src="resources/svg/accept.svg" onclick="usePreset(get('preset-list').value)" alt="Use"/>
-                <img src="resources/svg/decline.svg" onclick="deletePreset(get('preset-list').value)" alt="Delete"/>
-                <img src="resources/svg/new.svg" onclick="createPreset(get('preset-list').value)" alt="Create new"/>
+                <button onclick="usePreset(get('preset-list').value);">Use</button>
             </div>
             <div id="preset-queue" class="scrolly">
 
@@ -143,10 +145,8 @@ https://github.com/NadavTasher/WebAppBase/
             </div>
             <div id="preset-remove">
                 <p class="title">Remove time</p>
-                <div id="time-remove-list" class="scrolly">
-
-                </div>
-                <button onclick="view('general');">Done</button>
+                <div id="preset-remove-list" class="scrolly"></div>
+                <button onclick="view('preset');">Done</button>
             </div>
             <div id="library-add">
                 <p class="title">Add media</p>

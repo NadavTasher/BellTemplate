@@ -198,11 +198,15 @@ function updateSubmenus() {
     }
 }
 
+function usePreset(name, callback = undefined) {
+    save("setPreset", {preset: name}, () => {
+        loadDatabase(callback);
+    });
+}
+
 function addTime(callback = undefined) {
     save("addTime", {time: (parseInt(get("time-add-hour").value) * 60 + parseInt(get("time-add-minute").value))}, () => {
-        loadDatabase(() => {
-            if (callback !== undefined) callback();
-        });
+        loadDatabase(callback);
     });
 }
 
@@ -242,12 +246,6 @@ function removeTime() {
     div.appendChild(scrolly);
     div.appendChild(cancel);
     prompt(div);
-}
-
-function prompt(content) {
-    clear("prompt");
-    get("prompt").appendChild(content);
-    view("prompt");
 }
 
 function uploadMedia() {
