@@ -32,10 +32,23 @@ function loadPreset(name) {
                 let select = document.createElement("select");
                 let second = document.createElement("input");
                 let minute = parseInt(key);
+                let change = () => {
+                    if (!isNaN(second.value)) {
+                        if (select.value !== null) {
+                            save("set", {time: key, preset: name, media: select.value, second: second.value});
+                        } else {
+                            save("remove", {time: key, preset: name});
+                        }
+                    }
+                };
                 div.classList.add("sideways");
                 time.innerText = ((minute - minute % 60) / 60) + ":" + ((minute % 60 < 10) ? ("0" + minute % 60) : (minute % 60));
                 second.type = "number";
                 second.placeholder = "Second";
+                let none = document.createElement("option");
+                none.value = null;
+                none.innerText = "None";
+                select.appendChild(none);
                 if (database.hasOwnProperty("library")) {
                     for (let key in database.library) {
                         if (database.library.hasOwnProperty(key)) {
@@ -53,8 +66,10 @@ function loadPreset(name) {
                 if (value.hasOwnProperty(name)) {
                     select.value = value[name];
                 } else {
-                    select.value = undefined;
+                    select.value = null;
                 }
+                select.oninput = change;
+                second.oninput = change;
                 div.appendChild(time);
                 div.appendChild(select);
                 div.appendChild(second);
