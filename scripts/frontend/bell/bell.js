@@ -31,22 +31,27 @@ function loadPreset(name) {
                 let time = document.createElement("p");
                 let select = document.createElement("select");
                 let second = document.createElement("input");
-                let minute = parseInt(key);
+                let none = document.createElement("option");
                 let change = () => {
-                    if (!isNaN(second.value)) {
-                        if (select.value !== null) {
-                            save("set", {time: key, preset: name, media: select.value, second: second.value});
+                    if (!isNaN(parseFloat(second.value))) {
+                        if (select.value !== "null") {
+                            save("set", {
+                                time: key,
+                                preset: name,
+                                media: select.value,
+                                second: parseFloat(second.value)
+                            });
                         } else {
                             save("remove", {time: key, preset: name});
                         }
                     }
                 };
                 div.classList.add("sideways");
-                time.innerText = ((minute - minute % 60) / 60) + ":" + ((minute % 60 < 10) ? ("0" + minute % 60) : (minute % 60));
+                time.innerText = ((parseInt(key) - parseInt(key) % 60) / 60) + ":" + ((parseInt(key) % 60 < 10) ? ("0" + parseInt(key) % 60) : (parseInt(key) % 60));
                 second.type = "number";
                 second.placeholder = "Second";
-                let none = document.createElement("option");
-                none.value = null;
+                second.min = 0;
+                none.value = "null";
                 none.innerText = "None";
                 select.appendChild(none);
                 if (database.hasOwnProperty("library")) {
@@ -62,11 +67,12 @@ function loadPreset(name) {
                         }
                     }
                 }
-                let value = database.queue[key];
-                if (value.hasOwnProperty(name)) {
-                    select.value = value[name];
+                if (database.queue[key].hasOwnProperty(name) && database.queue[key][name].hasOwnProperty("media") && database.queue[key][name].hasOwnProperty("second")) {
+                    select.value = database.queue[key][name].media;
+                    second.value = database.queue[key][name].second;
                 } else {
-                    select.value = null;
+                    select.value = "null";
+                    second.value = 0;
                 }
                 select.oninput = change;
                 second.oninput = change;
@@ -109,7 +115,7 @@ function save(command, parameters, callback = undefined, form = fillForm()) {
 }
 
 function setDuration(duration) {
-    if (!isNaN(duration))
+    if (!isNaN(parseFloat(duration)))
         save("duration", {duration: parseFloat(duration)});
 }
 

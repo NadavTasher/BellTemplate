@@ -211,10 +211,7 @@ function bell_add_media($name, $file)
 function bell_has_media($id)
 {
     global $database;
-    foreach ($database->library as $existent) {
-        if ($existent === $id) return true;
-    }
-    return false;
+    return isset($database->library->$id);
 }
 
 // Time management
@@ -238,10 +235,7 @@ function bell_remove_time($time)
 function bell_has_time($time)
 {
     global $database;
-    foreach ($database->queue as $existent) {
-        if ($existent === $time) return true;
-    }
-    return false;
+    return isset($database->queue->$time);
 }
 
 
