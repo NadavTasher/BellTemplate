@@ -12,3 +12,5 @@ accounts_save();
 bell_add_preset(DEFAULT_PRESET);
 bell_set_preset(DEFAULT_PRESET);
 bell_save();
+
+unlink(__FILE__);

@@ -16,13 +16,13 @@ function loadDatabase(callback = undefined) {
             updateGeneral();
             updatePresets();
             updateLibrary();
+            updateSubmenus();
             if (callback !== undefined) callback();
         });
     });
 }
 
 function loadPreset(name) {
-    console.log(name);
     if (database.hasOwnProperty("queue")) {
         clear("preset-queue");
         for (let key in database.queue) {
@@ -173,51 +173,37 @@ function updatePresets() {
     }
 }
 
-function addTime() {
-    let div = document.createElement("div");
-    let title = document.createElement("p");
-    let time = document.createElement("div");
-    let buttons = document.createElement("div");
-    let ok = document.createElement("button");
-    let cancel = document.createElement("button");
-    let hour = document.createElement("input");
-    let minute = document.createElement("input");
-    let colon = document.createElement("p");
-    buttons.classList.add("sideways");
-    time.classList.add("sideways");
-    time.appendChild(hour);
-    time.appendChild(colon);
-    time.appendChild(minute);
-    buttons.appendChild(ok);
-    buttons.appendChild(cancel);
-    title.classList.add("title");
-    title.innerText = "Add time";
-    colon.innerText = ":";
-    colon.style.width = "min-content";
-    hour.type = "number";
-    hour.min = 0;
-    hour.max = 23;
-    hour.placeholder = "Hour";
-    minute.type = "number";
-    minute.min = 0;
-    minute.max = 59;
-    minute.placeholder = "Minute";
-    ok.innerText = "Add";
-    cancel.innerText = "Cancel";
-    ok.onclick = () => {
-        save("addTime", {time: (parseInt(hour.value) * 60 + parseInt(minute.value))}, () => {
-            loadDatabase(() => {
-                view("general");
-            });
+function updateSubmenus() {
+    // Time remove submenu
+    if (database.hasOwnProperty("queue")) {
+        clear("time-remove-list");
+        for (let key in database.queue) {
+            if (database.queue.hasOwnProperty(key)) {
+                let div = document.createElement("div");
+                let time = document.createElement("p");
+                let button = document.createElement("button");
+                div.classList.add("sideways");
+                time.innerText = ((parseInt(key) - parseInt(key) % 60) / 60) + ":" + ((parseInt(key) % 60 < 10) ? ("0" + parseInt(key) % 60) : (parseInt(key) % 60));
+                button.innerText = "Remove";
+                button.onclick = () => {
+                    save("removeTime", {time: key}, () => {
+                        loadDatabase();
+                    });
+                };
+                div.appendChild(time);
+                div.appendChild(button);
+                get("time-remove-list").appendChild(div);
+            }
+        }
+    }
+}
+
+function addTime(callback = undefined) {
+    save("addTime", {time: (parseInt(get("time-add-hour").value) * 60 + parseInt(get("time-add-minute").value))}, () => {
+        loadDatabase(() => {
+            if (callback !== undefined) callback();
         });
-    };
-    cancel.onclick = () => {
-        view("general");
-    };
-    div.appendChild(title);
-    div.appendChild(time);
-    div.appendChild(buttons);
-    prompt(div);
+    });
 }
 
 function removeTime() {
