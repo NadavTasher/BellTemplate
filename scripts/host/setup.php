@@ -1,5 +1,5 @@
 <?php
-include __DIR__ . ".." . DIRECTORY_SEPARATOR . "backend" . DIRECTORY_SEPARATOR . "bell" . DIRECTORY_SEPARATOR . "api.php";
+include __DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "backend" . DIRECTORY_SEPARATOR . "bell" . DIRECTORY_SEPARATOR . "api.php";
 
 // Template replacement constants
 const ADMINISTRATOR_ACCOUNT_NAME = "Administrator";
