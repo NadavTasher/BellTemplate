@@ -132,7 +132,7 @@ function bell_set($time, $preset, $media, $second)
             if (bell_has_media($media)) {
                 $artifact = new stdClass();
                 $artifact->media = $media;
-                $artifact->time = is_numeric($second) ? $second : doubleval($second);
+                $artifact->second = is_numeric($second) ? $second : doubleval($second);
                 $database->queue->$time->$preset = $artifact;
             }
         }

@@ -33,7 +33,7 @@ body > div {
     background-color: #66AA66;
 }
 
-#preset-queue, #library-list {
+.scrolly {
     justify-content: stretch;
     overflow-y: -moz-scrollbars-none;
     overflow-y: auto;
@@ -41,7 +41,7 @@ body > div {
     max-height: 70vh;
 }
 
-#preset-queue > div {
+.scrolly > div {
     background-color: #ddddee;
     border-radius: 1vh;
     border-color: transparent;
@@ -51,16 +51,16 @@ body > div {
     margin: 0.5vh;
 }
 
-#preset-queue > div > * {
+.scrolly > div > * {
     width: 100%;
 }
 
-#preset-queue > div > p {
+.scrolly > div > p {
     font-size: 150%;
     line-height: 7vh;
     height: 7vh;
 }
 
-#preset-queue::-webkit-scrollbar, #library-list::-webkit-scrollbar {
+.scrolly::-webkit-scrollbar {
     width: 0;
 }

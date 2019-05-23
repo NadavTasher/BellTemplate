@@ -74,7 +74,7 @@ https://github.com/NadavTasher/WebAppBase/
             <p>Ringing Duration</p>
             <div id="general-duration">
                 <input id="duration" type="number"
-                       oninput="setDuration(get('duration').value);"
+                       oninput="setDuration(this.value);"
                        placeholder="Ringing Duration"/>
             </div>
             <p>Ringing Mute</p>
@@ -88,14 +88,14 @@ https://github.com/NadavTasher/WebAppBase/
             <p>Ringing Time</p>
             <div>
                 <div class="sideways">
-                    <button id="time-add" onclick="addTime();">Add</button>
-                    <button id="time-remove" onclick="removeTime();">Remove</button>
+                    <button onclick="view('submenus');view('time-add');">Add</button>
+                    <button onclick="view('submenus');view('time-remove');">Remove</button>
                 </div>
             </div>
         </div>
         <div id="library">
             <p class="title">Library management</p>
-            <div id="library-list">
+            <div id="library-list" class="scrolly">
 
             </div>
             <button onclick="view('library-add');">Expand library</button>
@@ -109,18 +109,39 @@ https://github.com/NadavTasher/WebAppBase/
                 <img src="resources/svg/decline.svg" onclick="deletePreset(get('preset-list').value)" alt="Delete"/>
                 <img src="resources/svg/new.svg" onclick="createPreset(get('preset-list').value)" alt="Create new"/>
             </div>
-            <div id="preset-queue">
+            <div id="preset-queue" class="scrolly">
 
             </div>
         </div>
-        <div id="library-add">
-            <p class="title">Add media</p>
-            <input id="library-add-name" placeholder="Media Name"/>
-            <input id="library-add-file" name="audio" type="file"/>
-            <button onclick="uploadMedia()">Add Media</button>
-        </div>
-        <div id="prompt">
+        <div id="submenus">
+            <div id="time-add">
+                <p class="title">Add time</p>
+                <div class="sideways">
+                    <input id="time-add-hour" type="number" placeholder="Hour" min="0" max="23"/>
+                    <p>:</p>
+                    <input id="time-add-minute" type="number" placeholder="Minute" min="0" max="59"/>
+                </div>
+                <div class="sideways">
+                    <button onclick="addTime(()=>{view('general');});">Add</button>
+                    <button onclick="view('general');">Cancel</button>
+                </div>
+            </div>
+            <div id="time-remove">
+                <p class="title">Remove time</p>
+                <div id="time-remove-list" class="scrolly">
 
+                </div>
+                <button onclick="view('general');">Cancel</button>
+            </div>
+            <div id="preset-new">
+
+            </div>
+            <div id="library-add">
+                <p class="title">Add media</p>
+                <input id="library-add-name" placeholder="Media Name"/>
+                <input id="library-add-file" name="audio" type="file"/>
+                <button onclick="uploadMedia()">Add Media</button>
+            </div>
         </div>
     </div>
 </div>

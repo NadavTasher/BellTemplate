@@ -220,6 +220,44 @@ function addTime() {
     prompt(div);
 }
 
+function removeTime() {
+    let div = document.createElement("div");
+    let title = document.createElement("p");
+    let cancel = document.createElement("button");
+    let scrolly = document.createElement("div");
+    title.classList.add("title");
+    scrolly.classList.add("scrolly");
+    title.innerText = "Remove time";
+    cancel.innerText = "Done";
+    cancel.onclick = () => {
+        view("general");
+    };
+    if (database.hasOwnProperty("queue")) {
+        for (let key in database.queue) {
+            if (database.queue.hasOwnProperty(key)) {
+                let div = document.createElement("div");
+                let time = document.createElement("p");
+                let button = document.createElement("button");
+                div.classList.add("sideways");
+                time.innerText = ((parseInt(key) - parseInt(key) % 60) / 60) + ":" + ((parseInt(key) % 60 < 10) ? ("0" + parseInt(key) % 60) : (parseInt(key) % 60));
+                button.innerText = "Remove";
+                button.onclick = () => {
+                    save("removeTime", {time: key}, () => {
+                        scrolly.removeChild(div);
+                    });
+                };
+                div.appendChild(time);
+                div.appendChild(button);
+                scrolly.appendChild(div);
+            }
+        }
+    }
+    div.appendChild(title);
+    div.appendChild(scrolly);
+    div.appendChild(cancel);
+    prompt(div);
+}
+
 function prompt(content) {
     clear("prompt");
     get("prompt").appendChild(content);
