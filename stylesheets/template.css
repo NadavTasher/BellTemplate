@@ -6,18 +6,22 @@ body > div {
     font-size: 250%;
 }
 
-.row {
+.sideways {
     flex-direction: row;
     justify-content: space-around;
+    background-color: #ddddee;
+    border-radius: 1vh;
+    border-color: transparent;
+    margin: 0.5vh;
 }
 
-.row > img {
+.sideways > img {
     height: 6vh;
     width: 6vh;
     margin: 1vh;
 }
 
-.row > * {
+.sideways > * {
     width: inherit;
 }
 

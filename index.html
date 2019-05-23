@@ -80,14 +80,14 @@ https://github.com/NadavTasher/WebAppBase/
             <p>Ringing Mute</p>
             <div>
                 <p id="mute-state">Mute State</p>
-                <div class="row">
+                <div class="sideways">
                     <button id="mute" onclick="setMute(true);">Mute</button>
                     <button id="unmute" onclick="setMute(false);">Unmute</button>
                 </div>
             </div>
             <p>Ringing Time</p>
             <div>
-                <div class="row">
+                <div class="sideways">
                     <button id="time-add" onclick="addTime();">Add</button>
                     <button id="time-remove" onclick="removeTime();">Remove</button>
                 </div>
@@ -102,7 +102,7 @@ https://github.com/NadavTasher/WebAppBase/
         </div>
         <div id="preset">
             <p class="title">Preset management</p>
-            <div class="row">
+            <div class="sideways">
                 <select id="preset-list" oninput="loadPreset(this.value)">
                 </select>
                 <img src="resources/svg/accept.svg" onclick="usePreset(get('preset-list').value)" alt="Use"/>
@@ -118,6 +118,9 @@ https://github.com/NadavTasher/WebAppBase/
             <input id="library-add-name" placeholder="Media Name"/>
             <input id="library-add-file" name="audio" type="file"/>
             <button onclick="uploadMedia()">Add Media</button>
+        </div>
+        <div id="prompt">
+
         </div>
     </div>
 </div>
