@@ -25,7 +25,7 @@
       "name": "address",
       "description": "Web Address",
       "pattern": ".+",
-      "needle": "https://example.com/example",
+      "needle": "https://127.0.0.0",
       "haystacks": [
         "scripts/client/bell.txt",
         "scripts/client/setup.txt"

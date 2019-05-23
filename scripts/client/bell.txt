@@ -1,5 +1,5 @@
 <?php
-const URL = "https://example.com/example";
+const URL = "https://127.0.0.0";
 const DATABASE_FILE = __DIR__ . DIRECTORY_SEPARATOR . "database.json";
 const MEDIA_DIRECTORY = __DIR__ . DIRECTORY_SEPARATOR . "media";
 const DATABASE_ADDRESS = URL . "/files/bell/database.json";

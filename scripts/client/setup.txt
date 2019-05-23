@@ -1,6 +1,6 @@
 <?php
 
-const URL = "https://example.com/example";
+const URL = "https://127.0.0.0";
 const SOFTWARE_ADDRESS = URL . "/scripts/client/bell.txt";
 
 $bell = $_SERVER["HOME"] . DIRECTORY_SEPARATOR . ".bell";
