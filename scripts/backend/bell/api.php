@@ -22,7 +22,7 @@ function bell()
                         if (isset($parameters->name)) {
                             $file = bell_random(30) . ".mp3";
                             move_uploaded_file($_FILES["audio"]["tmp_name"], MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $file);
-                            bell_add_media($parameters->name, $file);
+                            bell_media_add($parameters->name, $file);
                             bell_result($action, "success", true);
                         } else {
                             bell_error($action, "Missing information");
@@ -30,7 +30,7 @@ function bell()
                         break;
                     case "time-add":
                         if (isset($parameters->time)) {
-                            bell_add_time($parameters->time);
+                            bell_time_add($parameters->time);
                             bell_result($action, "success", true);
                         } else {
                             bell_error($action, "Missing information");
@@ -38,7 +38,7 @@ function bell()
                         break;
                     case "time-remove":
                         if (isset($parameters->time)) {
-                            bell_remove_time($parameters->time);
+                            bell_time_remove($parameters->time);
                             bell_result($action, "success", true);
                         } else {
                             bell_error($action, "Missing information");
@@ -46,7 +46,7 @@ function bell()
                         break;
                     case "preset-add":
                         if (isset($parameters->preset)) {
-                            bell_add_preset($parameters->preset);
+                            bell_preset_add($parameters->preset);
                             bell_result($action, "success", true);
                         } else {
                             bell_error($action, "Missing information");
@@ -54,7 +54,7 @@ function bell()
                         break;
                     case "preset-remove":
                         if (isset($parameters->preset)) {
-                            bell_remove_preset($parameters->preset);
+                            bell_preset_remove($parameters->preset);
                             bell_result($action, "success", true);
                         } else {
                             bell_error($action, "Missing information");
@@ -62,7 +62,7 @@ function bell()
                         break;
                     case "preset-set":
                         if (isset($parameters->preset)) {
-                            bell_set_preset($parameters->preset);
+                            bell_preset_set($parameters->preset);
                             bell_result($action, "success", true);
                         } else {
                             bell_error($action, "Missing information");
@@ -70,7 +70,7 @@ function bell()
                         break;
                     case "queue-add":
                         if (isset($parameters->time) && isset($parameters->preset) && isset($parameters->media) && isset($parameters->second)) {
-                            bell_set($parameters->time, $parameters->preset, $parameters->media, $parameters->second);
+                            bell_queue_add($parameters->time, $parameters->preset, $parameters->media, $parameters->second);
                             bell_result($action, "success", true);
                         } else {
                             bell_error($action, "Missing information");
@@ -78,7 +78,7 @@ function bell()
                         break;
                     case "queue-remove":
                         if (isset($parameters->time) && isset($parameters->preset)) {
-                            bell_remove($parameters->time, $parameters->preset);
+                            bell_queue_remove($parameters->time, $parameters->preset);
                             bell_result($action, "success", true);
                         } else {
                             bell_error($action, "Missing information");
@@ -86,7 +86,7 @@ function bell()
                         break;
                     case "mute-set":
                         if (isset($parameters->mute)) {
-                            bell_set_mute($parameters->mute);
+                            bell_mute_set($parameters->mute);
                             bell_result($action, "success", true);
                         } else {
                             bell_error($action, "Missing information");
@@ -94,7 +94,7 @@ function bell()
                         break;
                     case "duration-set":
                         if (isset($parameters->duration)) {
-                            bell_set_duration($parameters->duration);
+                            bell_duration_set($parameters->duration);
                             bell_result($action, "success", true);
                         } else {
                             bell_error($action, "Missing information");
@@ -110,13 +110,13 @@ function bell()
 
 // General management
 
-function bell_set_mute($mute)
+function bell_mute_set($mute)
 {
     global $database;
     $database->mute = $mute;
 }
 
-function bell_set_duration($duration)
+function bell_duration_set($duration)
 {
     global $database;
     $database->duration = $duration;
@@ -124,12 +124,12 @@ function bell_set_duration($duration)
 
 // Combined management
 
-function bell_set($time, $preset, $media, $second)
+function bell_queue_add($time, $preset, $media, $second)
 {
     global $database;
-    if (bell_has_time($time)) {
-        if (bell_has_preset($preset)) {
-            if (bell_has_media($media)) {
+    if (bell_time_exists($time)) {
+        if (bell_preset_exists($preset)) {
+            if (bell_media_exists($media)) {
                 $artifact = new stdClass();
                 $artifact->media = $media;
                 $artifact->second = is_numeric($second) ? $second : doubleval($second);
@@ -139,11 +139,11 @@ function bell_set($time, $preset, $media, $second)
     }
 }
 
-function bell_remove($time, $preset)
+function bell_queue_remove($time, $preset)
 {
     global $database;
-    if (bell_has_time($time)) {
-        if (bell_has_preset($preset)) {
+    if (bell_time_exists($time)) {
+        if (bell_preset_exists($preset)) {
             if (isset($database->queue->$time->$preset)) {
                 unset($database->queue->$time->$preset);
             }
@@ -153,18 +153,18 @@ function bell_remove($time, $preset)
 
 // Preset management
 
-function bell_add_preset($name)
+function bell_preset_add($name)
 {
     global $database;
-    if (!bell_has_preset($name)) {
+    if (!bell_preset_exists($name)) {
         array_push($database->presets, $name);
     }
 }
 
-function bell_remove_preset($name)
+function bell_preset_remove($name)
 {
     global $database;
-    if (bell_has_preset($name)) {
+    if (bell_preset_exists($name)) {
         $presets = array();
         foreach ($database->presets as $preset) {
             if ($preset !== $name) {
@@ -178,15 +178,15 @@ function bell_remove_preset($name)
     }
 }
 
-function bell_set_preset($name)
+function bell_preset_set($name)
 {
     global $database;
-    if (bell_has_preset($name)) {
+    if (bell_preset_exists($name)) {
         $database->preset = $name;
     }
 }
 
-function bell_has_preset($name)
+function bell_preset_exists($name)
 {
     global $database;
     foreach ($database->presets as $preset) {
@@ -197,7 +197,7 @@ function bell_has_preset($name)
 
 // Media management
 
-function bell_add_media($name, $file)
+function bell_media_add($name, $file)
 {
     global $database;
     $mediaID = bell_random(20);
@@ -208,7 +208,7 @@ function bell_add_media($name, $file)
     $database->library->$mediaID = $media;
 }
 
-function bell_has_media($id)
+function bell_media_exists($id)
 {
     global $database;
     return isset($database->library->$id);
@@ -216,30 +216,30 @@ function bell_has_media($id)
 
 // Time management
 
-function bell_add_time($time)
+function bell_time_add($time)
 {
     global $database;
-    if (!bell_has_time($time)) {
+    if (!bell_time_exists($time)) {
         $database->queue->$time = new stdClass();
     }
 }
 
-function bell_remove_time($time)
+function bell_time_remove($time)
 {
     global $database;
-    if (bell_has_time($time)) {
+    if (bell_time_exists($time)) {
         unset($database->queue->$time);
     }
 }
 
-function bell_has_time($time)
+function bell_time_exists($time)
 {
     global $database;
     return isset($database->queue->$time);
 }
 
 
-function endsWith($haystack, $needle)
+function bell_ends_with($haystack, $needle)
 {
     $length = strlen($needle);
     if ($length == 0) {

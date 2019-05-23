@@ -35,14 +35,14 @@ function loadPreset(name) {
                 let change = () => {
                     if (!isNaN(parseFloat(second.value))) {
                         if (select.value !== "null") {
-                            save("set", {
+                            save("queue-add", {
                                 time: key,
                                 preset: name,
                                 media: select.value,
                                 second: parseFloat(second.value)
                             });
                         } else {
-                            save("remove", {time: key, preset: name});
+                            save("queue-remove", {time: key, preset: name});
                         }
                     }
                 };
