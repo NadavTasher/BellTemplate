@@ -7,16 +7,12 @@ function bell(loggedIn) {
     loadDatabase();
 }
 
-function addMedia() {
+function addMedia(callback = undefined) {
     let form = fillForm();
     form.append("audio", get("library-add-file").files[0]);
     if (get("library-add-name").value.length > 0) {
-        save("media-add", {name: get("library-add-name").value}, (result) => {
-            if (result.hasOwnProperty("success") && result.success) {
-                loadDatabase(() => {
-                    view("library");
-                });
-            }
+        save("media-add", {name: get("library-add-name").value}, () => {
+            loadDatabase(callback);
         }, form);
     }
 }
