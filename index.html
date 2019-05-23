@@ -131,10 +131,22 @@ https://github.com/NadavTasher/WebAppBase/
                 <div id="time-remove-list" class="scrolly">
 
                 </div>
-                <button onclick="view('general');">Cancel</button>
+                <button onclick="view('general');">Done</button>
             </div>
-            <div id="preset-new">
+            <div id="preset-add">
+                <p class="title">Add preset</p>
+                <input id="preset-add-name" type="text" placeholder="Name"/>
+                <div class="sideways">
+                    <button onclick="addPreset(()=>{view('preset');});">Add</button>
+                    <button onclick="view('preset');">Cancel</button>
+                </div>
+            </div>
+            <div id="preset-remove">
+                <p class="title">Remove time</p>
+                <div id="time-remove-list" class="scrolly">
 
+                </div>
+                <button onclick="view('general');">Done</button>
             </div>
             <div id="library-add">
                 <p class="title">Add media</p>
