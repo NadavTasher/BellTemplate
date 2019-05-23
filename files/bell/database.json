@@ -1,1 +1,8 @@
-{"mute":false,"duration":13,"presets":["Preset A","main"],"preset":"main","queue":{"775":{"main":{"media":"sE0VOKRKAJB6M3AOaxUo","second":2}},"1182":{}},"library":{"sE0VOKRKAJB6M3AOaxUo":{"name":"Test3 - Alexa","media":"tSKlPUfM96pEOAXOmjeLnGGZZvNdwt.mp3","hash":"098132bfb7354a2495c59f6c6b5aeeac4d413256"},"DkTdJVekb0BK7OMY5bUr":{"name":"Test4 - Alexa","media":"RHT4s9Pd5CLyuYe8ceONHYoSb8RO1a.mp3","hash":"098132bfb7354a2495c59f6c6b5aeeac4d413256"}}}
+{
+  "mute": false,
+  "duration": 0,
+  "presets": [],
+  "preset": "",
+  "queue": {},
+  "library": {}
+}
