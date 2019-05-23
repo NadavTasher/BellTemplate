@@ -21,14 +21,14 @@ function addMedia() {
     }
 }
 
-function addTime(hour, minute, callback = undefined) {
-    save("time-add", {time: (parseInt(hour) * 60 + parseInt(minute))}, () => {
+function addPreset(name, callback = undefined) {
+    save("preset-add", {preset: name}, () => {
         loadDatabase(callback);
     });
 }
 
-function addPreset(name, callback = undefined) {
-    save("preset-add", {preset: name}, () => {
+function addTime(hour, minute, callback = undefined) {
+    save("time-add", {time: (parseInt(hour) * 60 + parseInt(minute))}, () => {
         loadDatabase(callback);
     });
 }
