@@ -7,6 +7,32 @@ function bell(loggedIn) {
     loadDatabase();
 }
 
+function addMedia() {
+    let form = fillForm();
+    form.append("audio", get("library-add-file").files[0]);
+    if (get("library-add-name").value.length > 0) {
+        save("upload", {name: get("library-add-name").value}, (result) => {
+            if (result.hasOwnProperty("success") && result.success) {
+                loadDatabase(() => {
+                    view("library");
+                });
+            }
+        }, form);
+    }
+}
+
+function addTime(hour, minute, callback = undefined) {
+    save("time-add", {time: (parseInt(hour) * 60 + parseInt(minute))}, () => {
+        loadDatabase(callback);
+    });
+}
+
+function addPreset(name, callback = undefined) {
+    save("preset-add", {preset: name}, () => {
+        loadDatabase(callback);
+    });
+}
+
 function loadDatabase(callback = undefined) {
     fetch("files/bell/database.json", {
         method: "get"
@@ -85,8 +111,16 @@ function loadPreset(name) {
     }
 }
 
-function muteTextForState(state) {
-    return "State: " + (state ? "Muted" : "Not Muted");
+function removePreset(name, callback = undefined) {
+    save("preset-remove", {preset: name}, () => {
+        loadDatabase(callback);
+    });
+}
+
+function removeTime(time, callback = undefined) {
+    save("time-remove", {time: time}, () => {
+        loadDatabase(callback);
+    });
 }
 
 function save(command, parameters, callback = undefined, form = fillForm()) {
@@ -115,9 +149,16 @@ function setDuration(duration) {
         save("duration-set", {duration: parseFloat(duration)});
 }
 
-function setMute(state) {
-    get("mute-state").innerText = muteTextForState(state);
-    save("mute-set", {mute: state});
+function setMute(state, save = true) {
+    get("mute-state").innerText = "State: " + (state ? "Muted" : "Not Muted");
+    if (save)
+        save("mute-set", {mute: state});
+}
+
+function setPreset(name, callback = undefined) {
+    save("preset-set", {preset: name}, () => {
+        loadDatabase(callback);
+    });
 }
 
 function updateDuration() {
@@ -149,7 +190,7 @@ function updateLibrary() {
 
 function updateMute() {
     if (database.hasOwnProperty("mute")) {
-        get("mute-state").innerText = muteTextForState(database.mute);
+        setMute(database.mute, false);
     }
 }
 
@@ -208,49 +249,5 @@ function updateSubmenus() {
             div.appendChild(button);
             get("preset-remove-list").appendChild(div);
         }
-    }
-}
-
-function usePreset(name, callback = undefined) {
-    save("preset-set", {preset: name}, () => {
-        loadDatabase(callback);
-    });
-}
-
-function addPreset(name, callback = undefined) {
-    save("preset-add", {preset: name}, () => {
-        loadDatabase(callback);
-    });
-}
-
-function removePreset(name, callback = undefined) {
-    save("preset-remove", {preset: name}, () => {
-        loadDatabase(callback);
-    });
-}
-
-function addTime(hour, minute, callback = undefined) {
-    save("time-add", {time: (parseInt(hour) * 60 + parseInt(minute))}, () => {
-        loadDatabase(callback);
-    });
-}
-
-function removeTime(time, callback = undefined) {
-    save("time-remove", {time: time}, () => {
-        loadDatabase(callback);
-    });
-}
-
-function addMedia() {
-    let form = fillForm();
-    form.append("audio", get("library-add-file").files[0]);
-    if (get("library-add-name").value.length > 0) {
-        save("upload", {name: get("library-add-name").value}, (result) => {
-            if (result.hasOwnProperty("success") && result.success) {
-                loadDatabase(() => {
-                    view("library");
-                });
-            }
-        }, form);
     }
 }
