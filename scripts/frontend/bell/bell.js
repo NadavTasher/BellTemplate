@@ -174,10 +174,19 @@ function updateLibrary() {
         for (let key in database.library) {
             if (database.library.hasOwnProperty(key)) {
                 let value = database.library[key];
-                if (value.hasOwnProperty("name")) {
+                if (value.hasOwnProperty("name") && value.hasOwnProperty("media")) {
+                    let div = document.createElement("div");
+                    let button = document.createElement("button");
                     let media = document.createElement("p");
+                    div.classList.add("sideways");
                     media.innerText = value.name;
-                    get("library-list").appendChild(media);
+                    button.innerText = "Listen";
+                    button.onclick = () => {
+                        window.location = "/files/media/" + media;
+                    };
+                    div.appendChild(media);
+                    div.appendChild(button);
+                    get("library-list").appendChild(div);
                 }
             }
         }
