@@ -36,7 +36,7 @@ function load()
     if (file_exists(DATABASE_FILE)) {
         $content = file_get_contents(DATABASE_FILE);
         if (!empty($content))
-            $database = json_decode(file_get_contents(DATABASE_FILE));
+            $database = json_decode($content);
     }
     return $database;
 }
@@ -84,7 +84,7 @@ function play()
             if (!$database->mute && $database->duration > 0) {
                 $preset = $database->preset;
                 $duration = $database->duration;
-                $time = intval(date("H")) * 60 + intval(date("m"));
+                $time = intval(date("H")) * 60 + intval(date("i"));
                 if (isset($database->queue->$time) && isset($database->queue->$time->$preset) && isset($database->queue->$time->$preset->media) && isset($database->queue->$time->$preset->second)) {
                     $id = $database->queue->$time->$preset->media;
                     $second = $database->queue->$time->$preset->second;
