@@ -182,7 +182,7 @@ function updateLibrary() {
                     media.innerText = value.name;
                     button.innerText = "Listen";
                     button.onclick = () => {
-                        window.location = "/files/media/" + value.media;
+                        window.location = "files/media/" + value.media;
                     };
                     div.appendChild(media);
                     div.appendChild(button);
