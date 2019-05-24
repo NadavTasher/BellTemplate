@@ -31,7 +31,8 @@ function addTime(hour, minute, callback = undefined) {
 
 function loadDatabase(callback = undefined) {
     fetch("files/bell/database.json", {
-        method: "get"
+        method: "get",
+        cache: "no-store"
     }).then(response => {
         response.text().then((result) => {
             database = JSON.parse(result);
