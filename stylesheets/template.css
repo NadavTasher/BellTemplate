@@ -18,6 +18,9 @@
     font-size: 150%;
     line-height: 7vh;
     height: 7vh;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .scrolly > div {
