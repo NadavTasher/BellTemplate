@@ -85,9 +85,9 @@ function play()
                 $preset = $database->preset;
                 $duration = $database->duration;
                 $time = intval(date("H")) * 60 + intval(date("m"));
-                if (isset($database->queue->$time) && isset($database->queue->$time->$preset) && isset($database->queue->$time->$preset->media) && isset($database->queue->$time->$preset->time)) {
+                if (isset($database->queue->$time) && isset($database->queue->$time->$preset) && isset($database->queue->$time->$preset->media) && isset($database->queue->$time->$preset->second)) {
                     $id = $database->queue->$time->$preset->media;
-                    $second = $database->queue->$time->$preset->time;
+                    $second = $database->queue->$time->$preset->second;
                     if (isset($database->library->$id) && isset($database->library->$id->hash)) {
                         $file = MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $time . ".mp3";
                         if (file_exists($file)) {
