@@ -5,6 +5,7 @@ const SOFTWARE_ADDRESS = URL . "/scripts/client/bell.txt";
 
 $bell = $_SERVER["HOME"] . DIRECTORY_SEPARATOR . ".bell";
 $file = $bell . DIRECTORY_SEPARATOR . "bell.php";
+$crontab = $bell . DIRECTORY_SEPARATOR . "crontab.txt";
 
 echo "Creating directories - ";
 if (!file_exists($bell)) mkdir($bell);
@@ -17,15 +18,16 @@ chmod($file, 0777);
 echo "[X]\n";
 
 echo "Adding to cron - ";
-$content = shell_exec("crontab -l > /dev/null 2>&1");
+$content = shell_exec("crontab -l 2> /dev/null");
 $content .= "*/5 * * * * php $file refresh";
 $content .= PHP_EOL;
 $content .= "*/10 * * * * php $file update";
 $content .= PHP_EOL;
 $content .= "* * * * * php $file play";
 $content .= PHP_EOL;
-file_put_contents($bell . DIRECTORY_SEPARATOR . "crontab.txt", $content);
-shell_exec("crontab " . $bell . DIRECTORY_SEPARATOR . "crontab.txt" . " > /dev/null 2>&1");
+file_put_contents($crontab, $content);
+shell_exec("crontab " . $crontab . " > /dev/null 2>&1");
+unlink($crontab);
 echo "[X]\n";
 
 unlink(__FILE__);
