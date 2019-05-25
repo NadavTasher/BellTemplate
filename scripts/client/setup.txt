@@ -27,3 +27,5 @@ $content .= PHP_EOL;
 file_put_contents($bell . DIRECTORY_SEPARATOR . "crontab.txt", $content);
 shell_exec("crontab " . $bell . DIRECTORY_SEPARATOR . "crontab.txt" . " > /dev/null 2>&1");
 echo "[X]\n";
+
+unlink(__FILE__);
