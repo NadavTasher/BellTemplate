@@ -6,10 +6,11 @@ const SOFTWARE_ADDRESS = URL . "/scripts/client/bell.txt";
 $bell = $_SERVER["HOME"] . DIRECTORY_SEPARATOR . ".bell";
 $file = $bell . DIRECTORY_SEPARATOR . "bell.php";
 $crontab = $bell . DIRECTORY_SEPARATOR . "crontab.txt";
+$media = $bell . DIRECTORY_SEPARATOR . "media";
 
 echo "Creating directories - ";
 if (!file_exists($bell)) mkdir($bell);
-if (!file_exists($bell . DIRECTORY_SEPARATOR . "media")) mkdir($bell . DIRECTORY_SEPARATOR . "media");
+if (!file_exists($media)) mkdir($media);
 echo "[X]\n";
 
 echo "Downloading software - ";
