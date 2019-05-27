@@ -146,9 +146,9 @@ function setDuration(duration) {
         save("duration-set", {duration: parseFloat(duration)});
 }
 
-function setMute(state, save = true) {
+function setMute(state, shouldSave = true) {
     get("mute-state").innerText = "State: " + (state ? "Muted" : "Not Muted");
-    if (save)
+    if (shouldSave)
         save("mute-set", {mute: state});
 }
 
