@@ -105,7 +105,7 @@ https://github.com/NadavTasher/WebAppBase/
                 <button class="red" onclick="view('submenus');view('preset-remove');">Remove</button>
             </div>
             <div class="sideways">
-                <select id="preset-list" oninput="loadPreset(this.value);"></select>
+                <select id="preset-list" oninput="loadPreset(this.value);" title="Preset List"></select>
                 <button onclick="setPreset(get('preset-list').value);">Use</button>
             </div>
             <div id="preset-queue" class="scrolly">

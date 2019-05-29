@@ -11,20 +11,20 @@ function addMedia(callback = undefined) {
     let form = fillForm();
     form.append("audio", get("library-add-file").files[0]);
     if (get("library-add-name").value.length > 0) {
-        save("media-add", {name: get("library-add-name").value}, () => {
+        command("media-add", {name: get("library-add-name").value}, () => {
             loadDatabase(callback);
         }, form);
     }
 }
 
 function addPreset(name, callback = undefined) {
-    save("preset-add", {preset: name}, () => {
+    command("preset-add", {preset: name}, () => {
         loadDatabase(callback);
     });
 }
 
 function addTime(hour, minute, callback = undefined) {
-    save("time-add", {time: (parseInt(hour) * 60 + parseInt(minute))}, () => {
+    command("time-add", {time: (parseInt(hour) * 60 + parseInt(minute))}, () => {
         loadDatabase(callback);
     });
 }
@@ -58,14 +58,14 @@ function loadPreset(name) {
                 let change = () => {
                     if (!isNaN(parseFloat(second.value))) {
                         if (select.value !== "null") {
-                            save("queue-add", {
+                            command("queue-add", {
                                 time: key,
                                 preset: name,
                                 media: select.value,
                                 second: parseFloat(second.value)
                             });
                         } else {
-                            save("queue-remove", {time: key, preset: name});
+                            command("queue-remove", {time: key, preset: name});
                         }
                     }
                 };
@@ -109,18 +109,18 @@ function loadPreset(name) {
 }
 
 function removePreset(name, callback = undefined) {
-    save("preset-remove", {preset: name}, () => {
+    command("preset-remove", {preset: name}, () => {
         loadDatabase(callback);
     });
 }
 
 function removeTime(time, callback = undefined) {
-    save("time-remove", {time: time}, () => {
+    command("time-remove", {time: time}, () => {
         loadDatabase(callback);
     });
 }
 
-function save(command, parameters, callback = undefined, form = fillForm()) {
+function command(command, parameters, callback = undefined, form = fillForm()) {
     form.append("bell", JSON.stringify({
         action: command,
         parameters: parameters
@@ -143,17 +143,17 @@ function save(command, parameters, callback = undefined, form = fillForm()) {
 
 function setDuration(duration) {
     if (!isNaN(parseFloat(duration)))
-        save("duration-set", {duration: parseFloat(duration)});
+        command("duration-set", {duration: parseFloat(duration)});
 }
 
-function setMute(state, shouldSave = true) {
+function setMute(state, save = true) {
     get("mute-state").innerText = "State: " + (state ? "Muted" : "Not Muted");
-    if (shouldSave)
-        save("mute-set", {mute: state});
+    if (save)
+        command("mute-set", {mute: state});
 }
 
 function setPreset(name, callback = undefined) {
-    save("preset-set", {preset: name}, () => {
+    command("preset-set", {preset: name}, () => {
         loadDatabase(callback);
     });
 }
