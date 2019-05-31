@@ -48,7 +48,7 @@ function login(name, password) {
             password: password
         }
     }));
-    fetch("scripts/backend/accounts/accounts.php", {
+    fetch(document.getElementsByName("endpoint")[0].getAttribute("content"), {
         method: "post",
         body: form
     }).then(response => {
@@ -107,7 +107,7 @@ function register(name, password) {
             password: password
         }
     }));
-    fetch("scripts/backend/accounts/accounts.php", {
+    fetch(document.getElementsByName("endpoint")[0].getAttribute("content"), {
         method: "post",
         body: form
     }).then(response => {
@@ -130,7 +130,7 @@ function register(name, password) {
 
 function verify(success, failure) {
     let form = fillForm();
-    fetch("scripts/backend/accounts/accounts.php", {
+    fetch(document.getElementsByName("endpoint")[0].getAttribute("content"), {
         method: "post",
         body: form
     }).then(response => {
