@@ -6,6 +6,7 @@ const ADMINISTRATOR_ACCOUNT_NAME = "Administrator";
 const ADMINISTRATOR_ACCOUNT_PASSWORD = "BellTemplateDefaultPassword";
 const DEFAULT_PRESET = "Preset 1";
 
+accounts_load();
 accounts_register(ADMINISTRATOR_ACCOUNT_NAME, ADMINISTRATOR_ACCOUNT_PASSWORD);
 accounts_save();
 

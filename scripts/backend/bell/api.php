@@ -2,6 +2,8 @@
 
 include __DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "accounts" . DIRECTORY_SEPARATOR . "api.php";
 
+const BELL_API = "bell";
+
 const DATABASE = __DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "files" . DIRECTORY_SEPARATOR . "bell" . DIRECTORY_SEPARATOR . "database.json";
 const MEDIA_DIRECTORY = __DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "files" . DIRECTORY_SEPARATOR . "media";
 
@@ -12,92 +14,96 @@ function bell()
     $user = accounts();
     if ($user !== null) {
         if (isset($_POST["bell"])) {
-            $information = json_decode(bell_filter($_POST["bell"]));
+            $information = json_decode(filter($_POST["bell"]));
             if (isset($information->action) && isset($information->parameters)) {
                 $action = $information->action;
                 $parameters = $information->parameters;
-                bell_result($action, "success", false);
+                result(BELL_API, $action, "success", false);
                 switch ($action) {
                     case "media-add":
                         if (isset($parameters->name)) {
-                            $file = bell_random(30) . ".mp3";
-                            move_uploaded_file($_FILES["audio"]["tmp_name"], MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $file);
-                            bell_media_add($parameters->name, $file);
-                            bell_result($action, "success", true);
+                            if(bell_ends_with($_FILES["audio"]["tmp_name"],".mp3")) {
+                                $file = random(30) . ".mp3";
+                                move_uploaded_file($_FILES["audio"]["tmp_name"], MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $file);
+                                bell_media_add($parameters->name, $file);
+                                result(BELL_API, $action, "success", true);
+                            }else{
+                                error(BELL_API, $action, "Wrong media format");
+                            }
                         } else {
-                            bell_error($action, "Missing information");
+                            error(BELL_API, $action, "Missing information");
                         }
                         break;
                     case "time-add":
                         if (isset($parameters->time)) {
                             bell_time_add($parameters->time);
-                            bell_result($action, "success", true);
+                            result(BELL_API, $action, "success", true);
                         } else {
-                            bell_error($action, "Missing information");
+                            error(BELL_API, $action, "Missing information");
                         }
                         break;
                     case "time-remove":
                         if (isset($parameters->time)) {
                             bell_time_remove($parameters->time);
-                            bell_result($action, "success", true);
+                            result(BELL_API, $action, "success", true);
                         } else {
-                            bell_error($action, "Missing information");
+                            error(BELL_API, $action, "Missing information");
                         }
                         break;
                     case "preset-add":
                         if (isset($parameters->preset)) {
                             bell_preset_add($parameters->preset);
-                            bell_result($action, "success", true);
+                            result(BELL_API, $action, "success", true);
                         } else {
-                            bell_error($action, "Missing information");
+                            error(BELL_API, $action, "Missing information");
                         }
                         break;
                     case "preset-remove":
                         if (isset($parameters->preset)) {
                             bell_preset_remove($parameters->preset);
-                            bell_result($action, "success", true);
+                            result(BELL_API, $action, "success", true);
                         } else {
-                            bell_error($action, "Missing information");
+                            error(BELL_API, $action, "Missing information");
                         }
                         break;
                     case "preset-set":
                         if (isset($parameters->preset)) {
                             bell_preset_set($parameters->preset);
-                            bell_result($action, "success", true);
+                            result(BELL_API, $action, "success", true);
                         } else {
-                            bell_error($action, "Missing information");
+                            error(BELL_API, $action, "Missing information");
                         }
                         break;
                     case "queue-add":
                         if (isset($parameters->time) && isset($parameters->preset) && isset($parameters->media) && isset($parameters->second)) {
                             bell_queue_add($parameters->time, $parameters->preset, $parameters->media, $parameters->second);
-                            bell_result($action, "success", true);
+                            result(BELL_API, $action, "success", true);
                         } else {
-                            bell_error($action, "Missing information");
+                            error(BELL_API, $action, "Missing information");
                         }
                         break;
                     case "queue-remove":
                         if (isset($parameters->time) && isset($parameters->preset)) {
                             bell_queue_remove($parameters->time, $parameters->preset);
-                            bell_result($action, "success", true);
+                            result(BELL_API, $action, "success", true);
                         } else {
-                            bell_error($action, "Missing information");
+                            error(BELL_API, $action, "Missing information");
                         }
                         break;
                     case "mute-set":
                         if (isset($parameters->mute)) {
                             bell_mute_set($parameters->mute);
-                            bell_result($action, "success", true);
+                            result(BELL_API, $action, "success", true);
                         } else {
-                            bell_error($action, "Missing information");
+                            error(BELL_API, $action, "Missing information");
                         }
                         break;
                     case "duration-set":
                         if (isset($parameters->duration)) {
                             bell_duration_set($parameters->duration);
-                            bell_result($action, "success", true);
+                            result(BELL_API, $action, "success", true);
                         } else {
-                            bell_error($action, "Missing information");
+                            error(BELL_API, $action, "Missing information");
                         }
                         break;
                 }
@@ -200,7 +206,7 @@ function bell_preset_exists($name)
 function bell_media_add($name, $file)
 {
     global $database;
-    $mediaID = bell_random(20);
+    $mediaID = random(20);
     $media = new stdClass();
     $media->name = $name;
     $media->media = $file;
@@ -247,36 +253,6 @@ function bell_ends_with($haystack, $needle)
     }
 
     return (substr($haystack, -$length) === $needle);
-}
-
-function bell_error($type, $message)
-{
-    bell_result("errors", $type, $message);
-}
-
-function bell_filter($source)
-{
-    // Filter inputs from XSS and other attacks
-    $source = str_replace("<", "", $source);
-    $source = str_replace(">", "", $source);
-    return $source;
-}
-
-function bell_random($length)
-{
-    $current = str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")[0];
-    if ($length > 0) {
-        return $current . bell_random($length - 1);
-    }
-    return "";
-}
-
-function bell_result($type, $key, $value)
-{
-    global $result;
-    if (!isset($result->bell)) $result->bell = new stdClass();
-    if (!isset($result->bell->$type)) $result->bell->$type = new stdClass();
-    $result->bell->$type->$key = $value;
 }
 
 function bell_save()
