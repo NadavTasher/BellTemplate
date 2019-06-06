@@ -10,7 +10,7 @@ const ACCOUNTS_LOCKOUT_ATTEMPTS = 5;
 const ACCOUNTS_LOCKOUT_TIME = 5 * 60;
 const ACCOUNTS_MINIMUM_PASSWORD_LENGTH = 8;
 
-const ACCOUNTS_REGISTER_ENABLED = true;
+const ACCOUNTS_REGISTER_ENABLED = false;
 const ACCOUNTS_VERIFY_ENABLED = true;
 const ACCOUNTS_LOGIN_ENABLED = true;
 
@@ -19,8 +19,8 @@ $accounts_database = null;
 function accounts()
 {
     accounts_load();
-    if (isset($_POST["accounts"])) {
-        $information = json_decode(filter($_POST["accounts"]));
+    if (isset($_POST[ACCOUNTS_API])) {
+        $information = json_decode(filter($_POST[ACCOUNTS_API]));
         if (isset($information->action) && isset($information->parameters)) {
             $action = $information->action;
             $parameters = $information->parameters;
