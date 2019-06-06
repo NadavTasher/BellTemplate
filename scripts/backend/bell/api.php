@@ -13,8 +13,8 @@ function bell()
 {
     $user = accounts();
     if ($user !== null) {
-        if (isset($_POST["bell"])) {
-            $information = json_decode(filter($_POST["bell"]));
+        if (isset($_POST[BELL_API])) {
+            $information = json_decode(filter($_POST[BELL_API]));
             if (isset($information->action) && isset($information->parameters)) {
                 $action = $information->action;
                 $parameters = $information->parameters;
@@ -22,12 +22,12 @@ function bell()
                 switch ($action) {
                     case "media-add":
                         if (isset($parameters->name)) {
-                            if(bell_ends_with($_FILES["audio"]["tmp_name"],".mp3")) {
+                            if (bell_ends_with($_FILES["audio"]["tmp_name"], ".mp3")) {
                                 $file = random(30) . ".mp3";
                                 move_uploaded_file($_FILES["audio"]["tmp_name"], MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $file);
                                 bell_media_add($parameters->name, $file);
                                 result(BELL_API, $action, "success", true);
-                            }else{
+                            } else {
                                 error(BELL_API, $action, "Wrong media format");
                             }
                         } else {
