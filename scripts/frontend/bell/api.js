@@ -1,13 +1,17 @@
+const BELL_API = "bell";
+const BELL_ENDPOINT = document.getElementsByName("endpoint")[0].getAttribute("content");
+
 let database = null;
 
 function bell(loggedIn) {
     if (loggedIn) {
+        view("app");
         view("home");
     }
     loadDatabase();
 }
 
-function addMedia(callback = undefined) {
+function addMedia(callback = null) {
     let form = fillForm();
     form.append("audio", get("library-add-file").files[0]);
     if (get("library-add-name").value.length > 0) {
@@ -17,19 +21,19 @@ function addMedia(callback = undefined) {
     }
 }
 
-function addPreset(name, callback = undefined) {
+function addPreset(name, callback = null) {
     command("preset-add", {preset: name}, () => {
         loadDatabase(callback);
     });
 }
 
-function addTime(hour, minute, callback = undefined) {
+function addTime(hour, minute, callback = null) {
     command("time-add", {time: (parseInt(hour) * 60 + parseInt(minute))}, () => {
         loadDatabase(callback);
     });
 }
 
-function loadDatabase(callback = undefined) {
+function loadDatabase(callback = null) {
     fetch("files/bell/database.json", {
         method: "get",
         cache: "no-store"
@@ -40,7 +44,7 @@ function loadDatabase(callback = undefined) {
             updatePresets();
             updateLibrary();
             updateSubmenus();
-            if (callback !== undefined) callback();
+            if (callback !== null) callback();
         });
     });
 }
@@ -108,37 +112,20 @@ function loadPreset(name) {
     }
 }
 
-function removePreset(name, callback = undefined) {
+function removePreset(name, callback = null) {
     command("preset-remove", {preset: name}, () => {
         loadDatabase(callback);
     });
 }
 
-function removeTime(time, callback = undefined) {
+function removeTime(time, callback = null) {
     command("time-remove", {time: time}, () => {
         loadDatabase(callback);
     });
 }
 
-function command(command, parameters, callback = undefined, form = fillForm()) {
-    form.append("bell", JSON.stringify({
-        action: command,
-        parameters: parameters
-    }));
-    fetch("scripts/backend/bell/bell.php", {
-        method: "post",
-        body: form
-    }).then(response => {
-        response.text().then((result) => {
-            let json = JSON.parse(result);
-            if (json.hasOwnProperty("bell")) {
-                if (json.bell.hasOwnProperty(command)) {
-                    if (callback !== undefined)
-                        callback(json.bell[command]);
-                }
-            }
-        });
-    });
+function command(command, parameters, callback = null, form = fillForm()) {
+    api(BELL_ENDPOINT, BELL_API, command, parameters, callback, form);
 }
 
 function setDuration(duration) {
@@ -152,7 +139,7 @@ function setMute(state, save = true) {
         command("mute-set", {mute: state});
 }
 
-function setPreset(name, callback = undefined) {
+function setPreset(name, callback = null) {
     command("preset-set", {preset: name}, () => {
         loadDatabase(callback);
     });
