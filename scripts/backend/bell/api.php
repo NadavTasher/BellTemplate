@@ -105,7 +105,6 @@ function bell()
             return [false, null];
         }, true);
     }
-    return null;
 }
 
 // General management
