@@ -1,3 +1,8 @@
+/*
+Created By NadavTasher
+https://github.com/NadavTasher/WebAppBase/
+*/
+
 const BELL_API = "bell";
 const BELL_ENDPOINT = document.getElementsByName("endpoint")[0].getAttribute("content");
 
