@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Copyright (c) 2019 Nadav Tasher
+ * https://github.com/NadavTasher/BellTemplate/
+ **/
+
 const URL = "https://127.0.0.0";
 const SOFTWARE_ADDRESS = URL . "/scripts/client/bell.txt";
 

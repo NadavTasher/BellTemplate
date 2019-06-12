@@ -1,9 +1,9 @@
 <?php
 
-/*
-Created By NadavTasher
-https://github.com/NadavTasher/WebAppBase/
-*/
+/**
+ * Copyright (c) 2019 Nadav Tasher
+ * https://github.com/NadavTasher/AccountsTemplate/
+ **/
 
 include_once __DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "base" . DIRECTORY_SEPARATOR . "api.php";
 
@@ -15,7 +15,7 @@ const ACCOUNTS_LOCKOUT_ATTEMPTS = 5;
 const ACCOUNTS_LOCKOUT_TIME = 5 * 60;
 const ACCOUNTS_MINIMUM_PASSWORD_LENGTH = 8;
 
-const ACCOUNTS_REGISTER_ENABLED = true;
+const ACCOUNTS_REGISTER_ENABLED = false;
 const ACCOUNTS_VERIFY_ENABLED = true;
 const ACCOUNTS_LOGIN_ENABLED = true;
 
