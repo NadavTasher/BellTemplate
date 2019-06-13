@@ -1,201 +1,251 @@
 /**
  * Copyright (c) 2019 Nadav Tasher
- * https://github.com/NadavTasher/WebAppBase/
+ * https://github.com/NadavTasher/BellTemplate/
  **/
 
-function animate(v, from, to, seconds, property, keep = false, callback = null) {
-    let view = get(v);
-    view.removeAttribute("style");
-    let position = getComputedStyle(view).position;
-    if (position === "static" || position === "sticky") {
-        view.style.position = "relative";
-    }
-    try {
-        view.animate([{[property]: from}, {[property]: to}], {
-            duration: seconds * 1000,
-            fill: keep ? "forwards" : "backwards",
-            easing: "linear"
-        }).onfinish = () => {
-            if (callback !== null) callback();
-        };
-    } catch (e) {
-        if (callback !== null) callback();
-    }
+const BELL_API = "bell";
+const BELL_ENDPOINT = document.getElementsByName("endpoint")[0].getAttribute("content");
 
+let database = null;
+
+function bell(loggedIn) {
+    if (loggedIn) {
+        view("app");
+        view("home");
+    }
+    loadDatabase();
 }
 
-function api(endpoint = null, api = null, action = null, parameters = null, callback = null, form = body()) {
-    fetch(endpoint, {
-        method: "post",
-        body: body(api, action, parameters, form)
+function addMedia(callback = null) {
+    let form = fillForm();
+    form.append("audio", get("library-add-file").files[0]);
+    if (get("library-add-name").value.length > 0) {
+        command("media-add", {name: get("library-add-name").value}, () => {
+            loadDatabase(callback);
+        }, form);
+    }
+}
+
+function addPreset(name, callback = null) {
+    command("preset-add", {preset: name}, () => {
+        loadDatabase(callback);
+    });
+}
+
+function addTime(hour, minute, callback = null) {
+    command("time-add", {time: (parseInt(hour) * 60 + parseInt(minute))}, () => {
+        loadDatabase(callback);
+    });
+}
+
+function loadDatabase(callback = null) {
+    fetch("files/bell/database.json", {
+        method: "get",
+        cache: "no-store"
     }).then(response => {
         response.text().then((result) => {
-            if (callback !== null && api !== null && action !== null) {
-                let json = JSON.parse(result);
-                if (json.hasOwnProperty(api)) {
-                    if (json[api].hasOwnProperty("status") && json[api].hasOwnProperty("result")) {
-                        if (json[api]["status"].hasOwnProperty(action) && json[api]["result"].hasOwnProperty(action)) {
-                            let status = json[api]["status"][action];
-                            let result = json[api]["result"][action];
-                            if (status === true) {
-                                callback(true, result, null);
-                            } else {
-                                callback(false, null, status);
+            database = JSON.parse(result);
+            updateGeneral();
+            updatePresets();
+            updateLibrary();
+            updateSubmenus();
+            if (callback !== null) callback();
+        });
+    });
+}
+
+function loadPreset(name) {
+    if (database.hasOwnProperty("queue")) {
+        clear("preset-queue");
+        for (let key in database.queue) {
+            if (database.queue.hasOwnProperty(key)) {
+                let div = document.createElement("div");
+                let time = document.createElement("p");
+                let select = document.createElement("select");
+                let second = document.createElement("input");
+                let none = document.createElement("option");
+                let change = () => {
+                    if (!isNaN(parseFloat(second.value))) {
+                        if (select.value !== "null") {
+                            command("queue-add", {
+                                time: key,
+                                preset: name,
+                                media: select.value,
+                                second: parseFloat(second.value)
+                            });
+                        } else {
+                            command("queue-remove", {time: key, preset: name});
+                        }
+                    }
+                };
+                div.classList.add("sideways");
+                time.innerText = ((parseInt(key) - parseInt(key) % 60) / 60) + ":" + ((parseInt(key) % 60 < 10) ? ("0" + parseInt(key) % 60) : (parseInt(key) % 60));
+                second.type = "number";
+                second.placeholder = "Second";
+                second.min = 0;
+                none.value = "null";
+                none.innerText = "None";
+                select.appendChild(none);
+                if (database.hasOwnProperty("library")) {
+                    for (let key in database.library) {
+                        if (database.library.hasOwnProperty(key)) {
+                            let value = database.library[key];
+                            if (value.hasOwnProperty("name")) {
+                                let media = document.createElement("option");
+                                media.innerText = value.name;
+                                media.value = key;
+                                select.appendChild(media);
                             }
                         }
-                    } else {
-                        callback(false, null, "Base API not detected in JSON");
                     }
+                }
+                if (database.queue[key].hasOwnProperty(name) && database.queue[key][name].hasOwnProperty("media") && database.queue[key][name].hasOwnProperty("second")) {
+                    select.value = database.queue[key][name].media;
+                    second.value = database.queue[key][name].second;
                 } else {
-                    callback(false, null, "Base API (\"" + api + "\") not found in JSON");
+                    select.value = "null";
+                    second.value = 0;
+                }
+                select.oninput = change;
+                second.oninput = change;
+                div.appendChild(time);
+                div.appendChild(select);
+                div.appendChild(second);
+                get("preset-queue").appendChild(div);
+            }
+        }
+    }
+}
+
+function removePreset(name, callback = null) {
+    command("preset-remove", {preset: name}, () => {
+        loadDatabase(callback);
+    });
+}
+
+function removeTime(time, callback = null) {
+    command("time-remove", {time: time}, () => {
+        loadDatabase(callback);
+    });
+}
+
+function command(command, parameters, callback = null, form = fillForm()) {
+    api(BELL_ENDPOINT, BELL_API, command, parameters, callback, form);
+}
+
+function setDuration(duration) {
+    if (!isNaN(parseFloat(duration)))
+        command("duration-set", {duration: parseFloat(duration)});
+}
+
+function setMute(state, save = true) {
+    get("mute-state").innerText = "State: " + (state ? "Muted" : "Not Muted");
+    if (save)
+        command("mute-set", {mute: state});
+}
+
+function setPreset(name, callback = null) {
+    command("preset-set", {preset: name}, () => {
+        loadDatabase(callback);
+    });
+}
+
+function updateDuration() {
+    if (database.hasOwnProperty("duration")) {
+        get("duration").value = database.duration;
+    }
+}
+
+function updateGeneral() {
+    updateMute();
+    updateDuration();
+}
+
+function updateLibrary() {
+    if (database.hasOwnProperty("library")) {
+        clear("library-list");
+        for (let key in database.library) {
+            if (database.library.hasOwnProperty(key)) {
+                let value = database.library[key];
+                if (value.hasOwnProperty("name") && value.hasOwnProperty("media")) {
+                    let div = document.createElement("div");
+                    let button = document.createElement("button");
+                    let media = document.createElement("p");
+                    div.classList.add("sideways");
+                    media.innerText = value.name;
+                    button.innerText = "Listen";
+                    button.onclick = () => {
+                        window.location = "files/media/" + value.media;
+                    };
+                    div.appendChild(media);
+                    div.appendChild(button);
+                    get("library-list").appendChild(div);
                 }
             }
-        });
-    });
-}
-
-function body(api = null, action = null, parameters = null, form = new FormData()) {
-    if (api !== null && action !== null && parameters !== null && !form.has(api)) {
-        form.append(api, JSON.stringify({
-            action: action,
-            parameters: parameters
-        }));
-    }
-    return form;
-}
-
-function clear(v) {
-    let view = get(v);
-    while (view.firstChild) {
-        view.removeChild(view.firstChild);
+        }
     }
 }
 
-function download(file, data, type = "text/plain", encoding = "utf8") {
-    let link = document.createElement("a");
-    link.download = file;
-    link.href = "data:" + type + ";" + encoding + "," + data;
-    link.click();
+function updateMute() {
+    if (database.hasOwnProperty("mute")) {
+        setMute(database.mute, false);
+    }
 }
 
-function exists(v) {
-    return get(v) !== undefined;
+function updatePresets() {
+    if (database.hasOwnProperty("presets")) {
+        clear("preset-list");
+        for (let i = 0; i < database.presets.length; i++) {
+            let value = database.presets[i];
+            let option = document.createElement("option");
+            option.innerText = value;
+            option.value = value;
+            get("preset-list").appendChild(option);
+        }
+        if (database.hasOwnProperty("preset"))
+            get("preset-list").value = database.preset;
+        get("preset-list").oninput();
+    }
 }
 
-function get(v) {
-    return (typeof "" === typeof v || typeof '' === typeof v) ? document.getElementById(v) : v;
-}
-
-function gestures(up = null, down = null, left = null, right = null, upgoing = null, downgoing = null, leftgoing = null, rightgoing = null) {
-    let touchX, touchY, deltaX, deltaY;
-    document.ontouchstart = (event) => {
-        touchX = event.touches[0].clientX;
-        touchY = event.touches[0].clientY;
-    };
-    document.ontouchmove = (event) => {
-        deltaX = touchX - event.touches[0].clientX;
-        deltaY = touchY - event.touches[0].clientY;
-        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-            if (deltaX > 0) {
-                if (leftgoing !== null) leftgoing();
-            } else {
-                if (rightgoing !== null) rightgoing();
-            }
-        } else {
-            if (deltaY > 0) {
-                if (upgoing !== null) upgoing();
-            } else {
-                if (downgoing !== null) downgoing();
+function updateSubmenus() {
+    // Time remove submenu
+    if (database.hasOwnProperty("queue")) {
+        clear("time-remove-list");
+        for (let key in database.queue) {
+            if (database.queue.hasOwnProperty(key)) {
+                let div = document.createElement("div");
+                let time = document.createElement("p");
+                let button = document.createElement("button");
+                div.classList.add("sideways");
+                time.innerText = ((parseInt(key) - parseInt(key) % 60) / 60) + ":" + ((parseInt(key) % 60 < 10) ? ("0" + parseInt(key) % 60) : (parseInt(key) % 60));
+                button.innerText = "Remove";
+                button.onclick = () => {
+                    removeTime(key);
+                };
+                div.appendChild(time);
+                div.appendChild(button);
+                get("time-remove-list").appendChild(div);
             }
         }
-
-    };
-    document.ontouchend = () => {
-        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-            if (deltaX > 0) {
-                if (left !== null) left();
-            } else {
-                if (right !== null) right();
-            }
-        } else {
-            if (deltaY > 0) {
-                if (up !== null) up();
-            } else {
-                if (down !== null) down();
-            }
+    }
+    // Preset remove submenu
+    if (database.hasOwnProperty("presets")) {
+        clear("preset-remove-list");
+        for (let i = 0; i < database.presets.length; i++) {
+            let value = database.presets[i];
+            let div = document.createElement("div");
+            let name = document.createElement("p");
+            let button = document.createElement("button");
+            div.classList.add("sideways");
+            name.innerText = value;
+            button.innerText = "Remove";
+            button.onclick = () => {
+                removePreset(value);
+            };
+            div.appendChild(name);
+            div.appendChild(button);
+            get("preset-remove-list").appendChild(div);
         }
-        touchX = null;
-        touchY = null;
-    };
-}
-
-function hide(v) {
-    get(v).style.display = "none";
-}
-
-function html(callback = null) {
-    fetch("layouts/template.html", {
-        method: "get"
-    }).then(response => {
-        response.text().then((template) => {
-            fetch("layouts/app.html", {
-                method: "get"
-            }).then(response => {
-                response.text().then((app) => {
-                    document.body.children[0].innerHTML = template.replace("<!--App Body-->", app);
-                    if (callback !== null) callback();
-                });
-            });
-        });
-    });
-}
-
-function show(v) {
-    get(v).style.removeProperty("display");
-}
-
-function theme(color) {
-    let meta = document.getElementsByTagName("meta")["theme-color"];
-    if (meta !== null) {
-        meta.content = color;
-    } else {
-        meta = document.createElement("meta");
-        meta.name = "theme-color";
-        meta.content = color;
-        document.head.appendChild(meta);
-    }
-
-}
-
-function title(title) {
-    document.title = title;
-}
-
-function view(v) {
-    let element = get(v);
-    let parent = element.parentNode;
-    for (let n = 0; n < parent.children.length; n++) {
-        hide(parent.children[n]);
-    }
-    show(element);
-}
-
-function visible(v) {
-    return (get(v).style.getPropertyValue("display") !== "none");
-}
-
-function slide(v, motion = true, direction = true, callback = null) {
-    let offsets = {
-        right: window.innerWidth - (get(v).getBoundingClientRect().right - get(v).offsetWidth),
-        left: -(get(v).getBoundingClientRect().left + get(v).offsetWidth)
-    };
-    let offset = direction ? offsets.right : offsets.left;
-    animate(v, (motion ? offset : 0) + "px", (!motion ? offset : 0) + "px", 0.2, "left", false, callback);
-}
-
-function worker(w = "worker.js") {
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register(w).then((result) => {
-        });
     }
 }
