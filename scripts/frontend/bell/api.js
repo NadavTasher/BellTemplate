@@ -17,7 +17,7 @@ function bell(loggedIn) {
 }
 
 function addMedia(callback = null) {
-    let form = fillForm();
+    let form = accounts_fill();
     form.append("audio", get("library-add-file").files[0]);
     if (get("library-add-name").value.length > 0) {
         command("media-add", {name: get("library-add-name").value}, () => {
@@ -129,7 +129,7 @@ function removeTime(time, callback = null) {
     });
 }
 
-function command(command, parameters, callback = null, form = fillForm()) {
+function command(command, parameters, callback = null, form = accounts_fill()) {
     api(BELL_ENDPOINT, BELL_API, command, parameters, callback, form);
 }
 

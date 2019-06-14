@@ -15,7 +15,7 @@ const ACCOUNTS_LOCKOUT_ATTEMPTS = 5;
 const ACCOUNTS_LOCKOUT_TIME = 5 * 60;
 const ACCOUNTS_MINIMUM_PASSWORD_LENGTH = 8;
 
-const ACCOUNTS_REGISTER_ENABLED = false;
+const ACCOUNTS_REGISTER_ENABLED = true;
 const ACCOUNTS_VERIFY_ENABLED = true;
 const ACCOUNTS_LOGIN_ENABLED = true;
 
@@ -84,7 +84,7 @@ function accounts_hashed($password, $saltA, $saltB, $onion = 0)
 {
     if ($onion === 0)
         return hash("sha256", $saltA . $password . $saltB);
-    return hash("sha256", ($onion % 2 === 0 ? $saltA : $saltB) . accounts_hashed($password, $saltA, $saltB, $onion - 1) . ($onion % 2 === 0 ? $saltB : $saltA));
+    return hash("sha256", ($onion % 2 === 0 ? $saltA : $saltB) . $password . accounts_hashed($password, $saltA, $saltB, $onion - 1) . $password . ($onion % 2 === 0 ? $saltB : $saltA));
 }
 
 function accounts_id()
