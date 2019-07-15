@@ -4,131 +4,127 @@
  https://github.com/NadavTasher/BellTemplate/
 -->
 
-<div id="accounts" c>
-    <div id="login" c>
-        <p style="font-size: xx-large" t>Login To AppName</p>
-        <p id="login-error" style="font-size: large; color: red;" t></p>
-        <div c>
-            <input id="login-name" type="text" placeholder="Name" i/>
-            <input id="login-password" type="password" placeholder="Password" i/>
-            <button onclick="accounts_login(get('login-name').value,get('login-password').value)" i>Login</button>
+<div id="accounts" column>
+    <div id="login" column>
+        <p style="font-size: xx-large">Login To AppName</p>
+        <p id="login-error" style="font-size: large; color: red;"></p>
+        <div column>
+            <input id="login-name" type="text" placeholder="Name"/>
+            <input id="login-password" type="password" placeholder="Password"/>
+            <button onclick="accounts_login(get('login-name').value,get('login-password').value)">Login</button>
         </div>
-        <div c>
-            <p style="font-size: x-large" t>Don't have an account?</p>
-            <button onclick="view('register')" i>Register</button>
-        </div c>
-        <div c>
-            <button onclick="accounts_force()" i>Continue Without Login</button>
+        <div column>
+            <p style="font-size: x-large">Don't have an account?</p>
+            <button onclick="view('register')">Register</button>
+        </div>
+        <div column>
+            <button onclick="accounts_force()">Continue Without Login</button>
         </div>
     </div>
-    <div id="register" c>
-        <p style="font-size: xx-large" t>Register To AppName</p>
-        <p id="register-error" style="font-size: large; color: red;" t></p>
-        <div c>
-            <input id="register-name" type="text" placeholder="Name" i/>
-            <input id="register-password" type="password" placeholder="Password" i/>
-            <button onclick="accounts_register(get('register-name').value,get('register-password').value)" i>Register
+    <div id="register" column>
+        <p style="font-size: xx-large">Register To AppName</p>
+        <p id="register-error" style="font-size: large; color: red;"></p>
+        <div column>
+            <input id="register-name" type="text" placeholder="Name"/>
+            <input id="register-password" type="password" placeholder="Password"/>
+            <button onclick="accounts_register(get('register-name').value,get('register-password').value)">Register
             </button>
         </div>
-        <div c>
-            <p style="font-size: x-large" t>Already have an account?</p>
-            <button onclick="view('login')" i>Login</button>
+        <div column>
+            <p style="font-size: x-large">Already have an account?</p>
+            <button onclick="view('login')">Login</button>
         </div>
-        <div c>
-            <button onclick="accounts_force()" i>Continue Without Registration</button>
+        <div column>
+            <button onclick="accounts_force()">Continue Without Registration</button>
         </div>
     </div>
 </div>
-<div id="app" c>
-    <div id="home" c>
-        <p class="title" t>AppName Bell Management</p>
-        <button onclick="view('preset');" i>Preset management</button>
-        <button onclick="view('library');" i>Library management</button>
-        <button onclick="view('general');" i>General management</button>
+<div id="app" column>
+    <div id="home" column>
+        <p class="title">AppName Bell Management</p>
+        <button onclick="view('preset');">Preset management</button>
+        <button onclick="view('library');">Library management</button>
+        <button onclick="view('general');">General management</button>
     </div>
-    <div id="general" c>
-        <p class="title" t>General management</p>
-        <p t>Ringing Duration</p>
-        <div id="general-duration" c>
+    <div id="general" column>
+        <p class="title">General management</p>
+        <p>Ringing Duration</p>
+        <div id="general-duration" column>
             <input id="duration" type="number"
                    oninput="setDuration(this.value);"
-                   placeholder="Ringing Duration" i/>
+                   placeholder="Ringing Duration"/>
         </div>
-        <p t>Ringing Mute</p>
-        <div c>
-            <p id="mute-state" t>Mute State</p>
-            <div r>
-                <button class="green" onclick="setMute(false);" i>Unmute</button>
-                <button class="red" onclick="setMute(true);" i>Mute</button>
+        <p>Ringing Mute</p>
+        <div column>
+            <p id="mute-state">Mute State</p>
+            <div row>
+                <button class="green" onclick="setMute(false);">Unmute</button>
+                <button class="red" onclick="setMute(true);">Mute</button>
             </div>
         </div>
-        <p t>Ringing Time</p>
-        <div c>
-            <div r>
-                <button class="green" onclick="view('submenus');view('time-add');" i>Add</button>
-                <button class="red" onclick="view('submenus');view('time-remove');" i>Remove</button>
+        <p>Ringing Time</p>
+        <div column>
+            <div row>
+                <button class="green" onclick="view('submenus');view('time-add');">Add</button>
+                <button class="red" onclick="view('submenus');view('time-remove');">Remove</button>
             </div>
         </div>
     </div>
-    <div id="library" c>
-        <p class="title" t>Library management</p>
-        <div id="library-list" class="scrolly" c></div>
-        <button onclick="view('submenus');view('library-add');" i>Expand library</button>
+    <div id="library" column>
+        <p class="title">Library management</p>
+        <div id="library-list" class="scrolly" column></div>
+        <button onclick="view('submenus');view('library-add');">Expand library</button>
     </div>
-    <div id="preset" c>
-        <p class="title" t>Preset management</p>
-        <div r>
-            <button class="green" onclick="view('submenus');view('preset-add');" i>Add</button>
-            <button class="red" onclick="view('submenus');view('preset-remove');" i>Remove</button>
+    <div id="preset" column>
+        <p class="title">Preset management</p>
+        <div row>
+            <button class="green" onclick="view('submenus');view('preset-add');">Add</button>
+            <button class="red" onclick="view('submenus');view('preset-remove');">Remove</button>
         </div>
-        <div r>
-            <select id="preset-list" oninput="loadPreset(this.value);" title="Preset List" i></select>
-            <button onclick="setPreset(get('preset-list').value);" i>Use</button>
+        <div row>
+            <select id="preset-list" oninput="loadPreset(this.value);" title="Preset List"></select>
+            <button onclick="setPreset(get('preset-list').value);">Use</button>
         </div>
-        <div id="preset-queue" class="scrolly" c>
-
-        </div>
+        <div id="preset-queue" class="scrolly" column></div>
     </div>
-    <div id="submenus" c>
-        <div id="time-add" c>
-            <p class="title" t>Add time</p>
-            <div r>
-                <input id="time-add-hour" type="number" placeholder="Hour" min="0" max="23" i/>
-                <p id="colon" t>:</p>
-                <input id="time-add-minute" type="number" placeholder="Minute" min="0" max="59" i/>
+    <div id="submenus" column>
+        <div id="time-add" column>
+            <p class="title">Add time</p>
+            <div row>
+                <input id="time-add-hour" type="number" placeholder="Hour" min="0" max="23"/>
+                <p id="colon">:</p>
+                <input id="time-add-minute" type="number" placeholder="Minute" min="0" max="59"/>
             </div>
-            <div r>
-                <button onclick="addTime(get('time-add-hour').value,get('time-add-minute').value,()=>{view('general');});" i>
-                    Add
-                </button>
-                <button onclick="view('general');" i>Cancel</button>
+            <div row>
+                <button onclick="addTime(get('time-add-hour').value,get('time-add-minute').value,()=>{view('general');});">Add</button>
+                <button onclick="view('general');">Cancel</button>
             </div>
         </div>
-        <div id="time-remove" c>
-            <p class="title" t>Remove time</p>
-            <div id="time-remove-list" class="scrolly" c></div>
-            <button onclick="view('general');" i>Done</button>
+        <div id="time-remove" column>
+            <p class="title">Remove time</p>
+            <div id="time-remove-list" class="scrolly" column></div>
+            <button onclick="view('general');">Done</button>
         </div>
-        <div id="preset-add" c>
-            <p class="title" t>Add preset</p>
-            <div r>
-                <input id="preset-add-name" type="text" placeholder="Name" i/>
+        <div id="preset-add" column>
+            <p class="title">Add preset</p>
+            <div row>
+                <input id="preset-add-name" type="text" placeholder="Name"/>
             </div>
-            <div r>
-                <button onclick="addPreset(get('preset-add-name').value,()=>{view('preset');});" i>Add</button>
-                <button onclick="view('preset');" i>Cancel</button>
+            <div row>
+                <button onclick="addPreset(get('preset-add-name').value,()=>{view('preset');});">Add</button>
+                <button onclick="view('preset');">Cancel</button>
             </div>
         </div>
-        <div id="preset-remove" c>
-            <p class="title" t>Remove time</p>
-            <div id="preset-remove-list" class="scrolly" c></div>
-            <button onclick="view('preset');" i>Done</button>
+        <div id="preset-remove" column>
+            <p class="title">Remove time</p>
+            <div id="preset-remove-list" class="scrolly" column></div>
+            <button onclick="view('preset');">Done</button>
         </div>
-        <div id="library-add" c>
-            <p class="title" t>Add media</p>
-            <input id="library-add-name" placeholder="Media Name" i/>
-            <input id="library-add-file" name="audio" type="file" i/>
-            <button onclick="addMedia(()=>{view('library');});" i>Add Media</button>
+        <div id="library-add" column>
+            <p class="title">Add media</p>
+            <input id="library-add-name" placeholder="Media Name"/>
+            <input id="library-add-file" name="audio" type="file"/>
+            <button onclick="addMedia(()=>{view('library');});">Add Media</button>
         </div>
     </div>
 </div>
