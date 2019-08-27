@@ -60,7 +60,7 @@ function refresh()
                 if (isset($media->$preset) && isset($media->$preset->media)) {
                     $id = $media->$preset->media;
                     if (isset($database->library->$id) && isset($database->library->$id->hash) && isset($database->library->$id->media)) {
-                        if (sha1_file($file) !== $database->library->$id->hash) {
+                        if (!file_exists($file) || sha1_file($file) !== $database->library->$id->hash) {
                             file_put_contents($file, file_get_contents(MEDIA_ADDRESS . DIRECTORY_SEPARATOR . $database->library->$id->media));
                         }
                     }
