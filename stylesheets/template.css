@@ -7,6 +7,10 @@
     width: min-content;
 }
 
+[row=""] > *, [row=true] > * {
+    width: 100%;
+}
+
 .green {
     background-color: #66AA66;
 }
@@ -21,8 +25,6 @@
 
 .scrolly > div > p {
     font-size: 150%;
-    line-height: 7vh;
-    height: 7vh;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -48,25 +50,6 @@
 
 .scrolly::-webkit-scrollbar {
     width: 0;
-}
-
-.sideways > * {
-    width: inherit;
-}
-
-.sideways > img {
-    height: 6vh;
-    width: 6vh;
-    margin: 1vh;
-}
-
-.sideways {
-    flex-direction: row;
-    justify-content: space-around;
-    background-color: #ddddee;
-    border-radius: 1vh;
-    border-color: transparent;
-    margin: 0.5vh;
 }
 
 .title {

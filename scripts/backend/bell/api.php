@@ -22,7 +22,7 @@ function bell()
             switch ($action) {
                 case "media-add":
                     if (isset($parameters->name)) {
-                        if (bell_ends_with($_FILES["audio"]["tmp_name"], ".mp3")) {
+                        if (bell_ends_with($_FILES["audio"]["name"], ".mp3")) {
                             $file = random(30) . ".mp3";
                             move_uploaded_file($_FILES["audio"]["tmp_name"], BELL_MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $file);
                             bell_media_add($parameters->name, $file);

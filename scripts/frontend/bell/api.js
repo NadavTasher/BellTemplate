@@ -59,11 +59,11 @@ function loadPreset(name) {
         clear("preset-queue");
         for (let key in database.queue) {
             if (database.queue.hasOwnProperty(key)) {
-                let div = document.createElement("div");
-                let time = document.createElement("p");
-                let select = document.createElement("select");
-                let second = document.createElement("input");
-                let none = document.createElement("option");
+                let div = make("div");
+                let time = make("p");
+                let select = make("select");
+                let second = make("input");
+                let none = make("option");
                 let change = () => {
                     if (!isNaN(parseFloat(second.value))) {
                         if (select.value !== "null") {
@@ -78,7 +78,7 @@ function loadPreset(name) {
                         }
                     }
                 };
-                div.classList.add("sideways");
+                row(div);
                 time.innerText = ((parseInt(key) - parseInt(key) % 60) / 60) + ":" + ((parseInt(key) % 60 < 10) ? ("0" + parseInt(key) % 60) : (parseInt(key) % 60));
                 second.type = "number";
                 second.placeholder = "Second";
@@ -91,7 +91,7 @@ function loadPreset(name) {
                         if (database.library.hasOwnProperty(key)) {
                             let value = database.library[key];
                             if (value.hasOwnProperty("name")) {
-                                let media = document.createElement("option");
+                                let media = make("option");
                                 media.innerText = value.name;
                                 media.value = key;
                                 select.appendChild(media);
@@ -168,10 +168,10 @@ function updateLibrary() {
             if (database.library.hasOwnProperty(key)) {
                 let value = database.library[key];
                 if (value.hasOwnProperty("name") && value.hasOwnProperty("media")) {
-                    let div = document.createElement("div");
-                    let button = document.createElement("button");
-                    let media = document.createElement("p");
-                    div.classList.add("sideways");
+                    let div = make("div");
+                    let button = make("button");
+                    let media = make("p");
+                    row(div);
                     media.innerText = value.name;
                     button.innerText = "Listen";
                     button.onclick = () => {
@@ -197,7 +197,7 @@ function updatePresets() {
         clear("preset-list");
         for (let i = 0; i < database.presets.length; i++) {
             let value = database.presets[i];
-            let option = document.createElement("option");
+            let option = make("option");
             option.innerText = value;
             option.value = value;
             get("preset-list").appendChild(option);
@@ -214,10 +214,10 @@ function updateSubmenus() {
         clear("time-remove-list");
         for (let key in database.queue) {
             if (database.queue.hasOwnProperty(key)) {
-                let div = document.createElement("div");
-                let time = document.createElement("p");
-                let button = document.createElement("button");
-                div.classList.add("sideways");
+                let div = make("div");
+                let time = make("p");
+                let button = make("button");
+                row(div);
                 time.innerText = ((parseInt(key) - parseInt(key) % 60) / 60) + ":" + ((parseInt(key) % 60 < 10) ? ("0" + parseInt(key) % 60) : (parseInt(key) % 60));
                 button.innerText = "Remove";
                 button.onclick = () => {
@@ -234,10 +234,10 @@ function updateSubmenus() {
         clear("preset-remove-list");
         for (let i = 0; i < database.presets.length; i++) {
             let value = database.presets[i];
-            let div = document.createElement("div");
-            let name = document.createElement("p");
-            let button = document.createElement("button");
-            div.classList.add("sideways");
+            let div = make("div");
+            let name = make("p");
+            let button = make("button");
+            row(div);
             name.innerText = value;
             button.innerText = "Remove";
             button.onclick = () => {

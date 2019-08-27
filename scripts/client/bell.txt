@@ -56,7 +56,7 @@ function refresh()
         if (isset($bell_database->queue) && isset($bell_database->library) && isset($bell_database->preset)) {
             $preset = $bell_database->preset;
             foreach ($bell_database->queue as $time => $media) {
-                $file = BELL_MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $time . ".mp3";
+                $file = MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $time . ".mp3";
                 if (isset($media->$preset) && isset($media->$preset->media)) {
                     $id = $media->$preset->media;
                     if (isset($bell_database->library->$id) && isset($bell_database->library->$id->hash) && isset($bell_database->library->$id->media)) {
@@ -95,7 +95,7 @@ function play()
                     $id = $bell_database->queue->$time->$preset->media;
                     $second = $bell_database->queue->$time->$preset->second;
                     if (isset($bell_database->library->$id) && isset($bell_database->library->$id->hash)) {
-                        $file = BELL_MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $time . ".mp3";
+                        $file = MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $time . ".mp3";
                         if (file_exists($file)) {
                             if (sha1_file($file) === $bell_database->library->$id->hash) {
                                 shell_exec("ffplay -i " . $file . " -ss " . $second . " -t " . $duration . " -v error -nodisp -autoexit");
