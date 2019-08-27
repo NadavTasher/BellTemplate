@@ -49,19 +49,19 @@ function load()
 
 function refresh()
 {
-    global $bell_database;
+    global $database;
     file_put_contents(DATABASE_FILE, file_get_contents(DATABASE_ADDRESS));
-    $bell_database = load();
-    if ($bell_database !== null) {
-        if (isset($bell_database->queue) && isset($bell_database->library) && isset($bell_database->preset)) {
-            $preset = $bell_database->preset;
-            foreach ($bell_database->queue as $time => $media) {
+    $database = load();
+    if ($database !== null) {
+        if (isset($database->queue) && isset($database->library) && isset($database->preset)) {
+            $preset = $database->preset;
+            foreach ($database->queue as $time => $media) {
                 $file = MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $time . ".mp3";
                 if (isset($media->$preset) && isset($media->$preset->media)) {
                     $id = $media->$preset->media;
-                    if (isset($bell_database->library->$id) && isset($bell_database->library->$id->hash) && isset($bell_database->library->$id->media)) {
-                        if (sha1_file($file) !== $bell_database->library->$id->hash) {
-                            file_put_contents($file, file_get_contents(MEDIA_ADDRESS . DIRECTORY_SEPARATOR . $bell_database->library->$id->media));
+                    if (isset($database->library->$id) && isset($database->library->$id->hash) && isset($database->library->$id->media)) {
+                        if (sha1_file($file) !== $database->library->$id->hash) {
+                            file_put_contents($file, file_get_contents(MEDIA_ADDRESS . DIRECTORY_SEPARATOR . $database->library->$id->media));
                         }
                     }
                 }
@@ -84,20 +84,20 @@ function update()
 
 function play()
 {
-    global $bell_database;
-    if ($bell_database !== null) {
-        if (isset($bell_database->mute) && isset($bell_database->duration) && isset($bell_database->queue) && isset($bell_database->library) && isset($bell_database->preset)) {
-            if (!$bell_database->mute && $bell_database->duration > 0) {
-                $preset = $bell_database->preset;
-                $duration = $bell_database->duration;
+    global $database;
+    if ($database !== null) {
+        if (isset($database->mute) && isset($database->duration) && isset($database->queue) && isset($database->library) && isset($database->preset)) {
+            if (!$database->mute && $database->duration > 0) {
+                $preset = $database->preset;
+                $duration = $database->duration;
                 $time = intval(date("H")) * 60 + intval(date("i"));
-                if (isset($bell_database->queue->$time) && isset($bell_database->queue->$time->$preset) && isset($bell_database->queue->$time->$preset->media) && isset($bell_database->queue->$time->$preset->second)) {
-                    $id = $bell_database->queue->$time->$preset->media;
-                    $second = $bell_database->queue->$time->$preset->second;
-                    if (isset($bell_database->library->$id) && isset($bell_database->library->$id->hash)) {
+                if (isset($database->queue->$time) && isset($database->queue->$time->$preset) && isset($database->queue->$time->$preset->media) && isset($database->queue->$time->$preset->second)) {
+                    $id = $database->queue->$time->$preset->media;
+                    $second = $database->queue->$time->$preset->second;
+                    if (isset($database->library->$id) && isset($database->library->$id->hash)) {
                         $file = MEDIA_DIRECTORY . DIRECTORY_SEPARATOR . $time . ".mp3";
                         if (file_exists($file)) {
-                            if (sha1_file($file) === $bell_database->library->$id->hash) {
+                            if (sha1_file($file) === $database->library->$id->hash) {
                                 shell_exec("ffplay -i " . $file . " -ss " . $second . " -t " . $duration . " -v error -nodisp -autoexit");
                             }
                         }
