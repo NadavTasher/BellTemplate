@@ -153,30 +153,30 @@ const RIGHT = !LEFT;
 const IN = true;
 const OUT = !IN;
 
-function animate(v, property = "left", origin = "0px", destination = "0px", length = 1, delay = 0, preserve = true, callback = null) {
+function animate(v, property = "left", stops = ["0px", "0px"], length = 1, callback = null) {
     let view = get(v);
-    let removeStyles = () => {
-        view.style.removeProperty("position");
-        view.style.removeProperty("transitionDuration");
-        view.style.removeProperty("transitionTimingFunction");
-        view.style.removeProperty(property);
+    let interval = null;
+    let next = () => {
+        view.style[property] = stops[0];
+        stops.splice(0, 1);
     };
-    removeStyles();
-    if (getComputedStyle(view).position === "static" ||
-        getComputedStyle(view).position === "sticky")
-        view.style.position = "relative";
-    view.style.transitionDuration = length + "s";
-    view.style.transitionTimingFunction = "ease";
-    view.style[property] = origin;
+    let loop = () => {
+        if (stops.length > 0) {
+            next();
+        } else {
+            clearInterval(interval);
+            view.style.removeProperty("transitionDuration");
+            view.style.removeProperty("transitionTimingFunction");
+            if (callback !== null) callback();
+        }
+    };
+    next();
+    interval = setInterval(loop, length * 1000);
     setTimeout(() => {
-        view.style[property] = destination;
-        setTimeout(() => {
-            if (!preserve)
-                removeStyles();
-            if (callback !== null)
-                callback();
-        }, length * 1000);
-    }, 100 + delay * 1000);
+        view.style.transitionDuration = length + "s";
+        view.style.transitionTimingFunction = "ease";
+        loop();
+    }, 0);
 }
 
 function clear(v) {
@@ -213,36 +213,39 @@ function make(type, content = null, classes = []) {
 }
 
 function page(from, to, callback = null) {
-    transition(from, OUT, () => {
+    let stepA = () => {
+        slide(get(from), OUT, LEFT, 0.2, 0, stepB);
+    };
+    let stepB = () => {
         let temporary = get(to);
-        while (temporary.parentNode !== get(from).parentNode && temporary.parentNode !== document.body) {
+        while (temporary.parentNode !== document.body && temporary.parentNode !== document.body) {
             view(temporary);
             temporary = temporary.parentNode;
         }
         view(temporary);
-        transition(to, IN, callback);
-    });
+        slide(temporary, IN, RIGHT, 0.2, 0, callback);
+    };
+    if (from === null)
+        stepB();
+    else
+        stepA();
 }
 
 function show(v) {
     get(v).style.removeProperty("display");
 }
 
-function slide(v, motion = IN, direction = RIGHT, length = 0.2, delay = 0, callback = null) {
+function slide(v, motion = IN, direction = RIGHT, length = 0.2, callback = null) {
     let view = get(v);
     let style = getComputedStyle(view);
     let edge = (direction === RIGHT ? 1 : -1) * screen.width;
     let current = isNaN(parseInt(style.left)) ? 0 : parseInt(style.left);
     let origin = current === 0 && motion === IN ? edge : current;
     let destination = motion === IN ? 0 : edge;
-    animate(view, "left", origin + "px", destination + "px", length, delay, true, callback);
-}
-
-function transition(v, type = OUT, callback = null) {
-    let element = get(v);
-    for (let n = 0; n < element.children.length; n++) {
-        slide(element.children[n], type, RIGHT, 0.4, 0.2 * n, n === element.children.length - 1 ? callback : null);
-    }
+    if (getComputedStyle(view).position === "static" ||
+        getComputedStyle(view).position === "sticky")
+        view.style.position = "relative";
+    animate(view, "left", [origin + "px", destination + "px"], length, callback);
 }
 
 function view(v) {

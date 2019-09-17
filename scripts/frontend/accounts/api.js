@@ -10,10 +10,13 @@ const ACCOUNTS_API = "accounts";
 let accounts_callback_success, accounts_callback_failure;
 
 function accounts(callback = null) {
-    if (exists("accounts")) view("accounts");
-    accounts_callback_success = (loggedIn = false) => {
-        if (exists("accounts")) hide("accounts");
-        if (callback !== null) callback(loggedIn);
+    if (exists("accounts"))
+        view("accounts");
+    accounts_callback_success = (loggedIn = false, userInfo = {}) => {
+        if (exists("accounts"))
+            hide("accounts");
+        if (callback !== null)
+            callback(loggedIn, userInfo);
     };
     accounts_callback_failure = () => {
         if (exists("accounts") && exists("login")) {
@@ -35,7 +38,9 @@ function accounts(callback = null) {
 
 function accounts_fill(form = body()) {
     if (accounts_cookie_has(ACCOUNTS_CERTIFICATE_COOKIE)) {
-        form = body(ACCOUNTS_API, "verify", {certificate: accounts_cookie_pull(ACCOUNTS_CERTIFICATE_COOKIE)}, form);
+        form = body(ACCOUNTS_API, "verify", {
+            certificate: accounts_cookie_pull(ACCOUNTS_CERTIFICATE_COOKIE)
+        }, form);
     }
     return form;
 }
@@ -97,9 +102,10 @@ function accounts_register(name, password) {
 }
 
 function accounts_verify(success, failure) {
-    api(ACCOUNTS_ENDPOINT, ACCOUNTS_API, "verify", null, (status) => {
-        if (status) {
-            success(true);
+    api(ACCOUNTS_ENDPOINT, ACCOUNTS_API, "verify", {
+    }, (state, result, error) => {
+        if (state) {
+            success(true, result);
         } else {
             failure();
         }
