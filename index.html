@@ -28,6 +28,6 @@
     <title>AppName</title>
     <noscript></noscript>
 </head>
-<body onload="accounts((loggedIn)=>{bell(loggedIn);load(loggedIn);});" column>
+<body onload="prepare(()=>accounts((loggedIn)=>{bell(loggedIn);load(loggedIn);}));" column>
 </body>
 </html>
